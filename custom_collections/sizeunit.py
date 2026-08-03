@@ -1,0 +1,41 @@
+from pydantic import BaseModel
+from enum import Enum
+
+class UnitType (Enum):
+    """
+    The Unit type is used to determine the unit used for size.
+    """
+    PX = "px"
+    """pixel"""
+
+    PT = "pt"
+    """Points of an Inch"""
+
+    AUTO = "auto"
+    """Compute the size automatically based on normal document flow"""
+
+    REM = "rem"
+    """Relative to the root (<html>) element's font size."""
+
+    VW = "vw"
+    """Viewport Width"""
+
+    VH = "vh"
+    """Viewport Height"""
+
+    PERCENT = "%"
+    """Size relative to the parent element's specific property value"""
+
+    FIT_CONTENT = "fit-content"
+
+class SizeUnit:
+    def __init__(self, unit_type: UnitType, size: float | None = None):
+        self.unit_type: UnitType = unit_type
+        self.size: float | None = size
+
+    def __str__(self) -> str:
+        size = self.size
+        if self.size == None:
+            size = ""
+
+        return f"{size}{self.unit_type.value}"

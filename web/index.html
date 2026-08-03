@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kotway</title>
+</head>
+<script>
+const sessionId = null; // Replaced by Python.
+sessionStorage.setItem('sessionId', sessionId);
+</script>
+
+<body>
+    <div  id="VIEWS_CONTAINER"></div>
+</body>
+
+</html>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Prevents scrollbars if content overflows */
+}
+
+#VIEWS_CONTAINER {
+  width: 100vw;       /* 100% of viewport width */
+  height: 100vh;      /* 100% of viewport height */
+  height: 100dvh;     /* Dynamic viewport height (fixes mobile browser address bar jumps) */
+  box-sizing: border-box;
+}
+</style>
+
+<script type="module">
+import {KotwayApp} from "./js/kotway.js";
+import {FlaskAdaptorTransport} from "./js/custom_transports/flaskadaptortransport.js";
+
+const adapterTransport = new FlaskAdaptorTransport();
+const kotwayApp = new KotwayApp(adapterTransport);
+
+kotwayApp.run();
+</script>
