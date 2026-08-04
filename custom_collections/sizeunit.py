@@ -28,14 +28,10 @@ class UnitType (Enum):
 
     FIT_CONTENT = "fit-content"
 
-class SizeUnit:
-    def __init__(self, unit_type: UnitType, size: float | None = None):
-        self.unit_type: UnitType = unit_type
-        self.size: float | None = size
-
-    def __str__(self) -> str:
-        size = self.size
-        if self.size == None:
-            size = ""
-
-        return f"{size}{self.unit_type.value}"
+class SizeUnit (str):
+    def __new__(cls, unit_type: UnitType, size: float | None = None):
+        text = f"{'' if size is None else size}{unit_type.value}"
+        obj = super().__new__(cls, text)
+        obj.unit_type = unit_type
+        obj.size = size
+        return obj

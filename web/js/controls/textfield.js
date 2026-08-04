@@ -21,6 +21,8 @@ export class TextField extends Control {
             null,
             "submit"
         )
+
+        this._setTrigger("focus", this.toggleFocus.bind(this));
     }
 
     updateProp (proptype, propName, propValue) {
@@ -29,6 +31,15 @@ export class TextField extends Control {
         }
         else if (proptype == "style") {
             this.fieldElem.style.setProperty(propName, propValue);
+        }
+    }
+
+    toggleFocus (data) {
+        const focusState = data.state;
+        if (focusState == true) {
+            this.fieldElem.focus();
+        } else {
+            this.fieldElem.blur();
         }
     }
 }

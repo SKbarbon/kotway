@@ -2,8 +2,8 @@ from .models import EventCore, EventType, InteractionEvent
 from .utils.find_control_by_uuid import find_control_by_uuid
 from .models.events.pageevent import *
 from .custom_collections.viewslist import ViewsList
-from .controls.control import Control
-from .controls.view import View
+
+from .controls import Control, View
 
 class Page:
     """
@@ -88,10 +88,11 @@ A Page is a session and views container.
 
 
     def get_control_by_uuid (self, uuid:str):
+        found_control = None
         for v in self.views:
             if v.uuid == uuid: return v
-            control = find_control_by_uuid(uuid=uuid, controls=v.controls)
-            return control
+            found_control = find_control_by_uuid(uuid=uuid, controls=v.controls)
+        return found_control
 
     # Props
 

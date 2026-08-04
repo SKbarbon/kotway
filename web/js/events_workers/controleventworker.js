@@ -13,6 +13,13 @@ export class ControlEventWorker {
         else if (ev.event_name == "add_child") {
             this.addChildToParentControl(ev.data);
         }
+        else if (ev.event_name == "remove_child") {
+            this.selectedControl.removeControl(ev.data.control_uuid);
+        }
+        else if (ev.event_name == "execute_trigger") {
+            const evData = ev.data;
+            this.selectedControl.executeTrigger(evData.trigger_name, evData.data);
+        }
     }
 
     updateControlProps (eventData) {

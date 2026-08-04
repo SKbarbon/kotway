@@ -6,6 +6,7 @@ class ControlEventName (Enum):
     UPDATE_PROPS = "update_props"
     ADD_CHILD = "add_child"
     REMOVE_CHILD = "remove_child"
+    EXECUTE_TRIGGER = "execute_trigger"
 
 class ControlEvent (BaseModel):
     control_uuid: str
@@ -26,3 +27,8 @@ class ControlEventDataAddControl (BaseModel):
 
 class ControlEventDataRemoveChild (BaseModel):
     control_uuid: str
+
+
+class ControlEventDataExecuteTrigger (BaseModel):
+    trigger_name: str
+    data: dict

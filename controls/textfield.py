@@ -1,7 +1,10 @@
 from ..models.controldefaultkwargs import ControlDefaultKwargs, Unpack
 from ..models import InteractionEvent
 from .control import Control, ElementPropType
+from pydantic import BaseModel
 
+class FieldFocusData (BaseModel):
+    state: bool
 
 class TextField (Control):
     def __init__(self, value: str = "", placeholder: str = "", on_change=None, on_submit=None, on_input=None, *args, **kwargs: Unpack[ControlDefaultKwargs]):
@@ -14,6 +17,14 @@ class TextField (Control):
         self.on_submit = on_submit
         self.on_input = on_input
 
+
+    def focus (self):
+        """Focus the pointer on the field."""
+        self._execute_trigger("focus", FieldFocusData(state=True).model_dump())
+
+    def blur (self):
+        """Remove the pointer from the field"""
+        self._execute_trigger("focus", FieldFocusData(state=False).model_dump())
 
     @property
     def value (self) -> str:

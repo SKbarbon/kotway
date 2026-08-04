@@ -9,6 +9,8 @@ export class Control {
         this.page = null;
         this.view = null;
         this.parent = null;
+
+        this.triggers = {}; // triggerName: str, triggerFunction: void
     }
     
     updateProp (proptype, propName, propValue) {
@@ -23,6 +25,7 @@ export class Control {
     listenToInteractionEvent (targetElement, interactionName) {
         if (targetElement == null) {targetElement=this.htmlElement}
         targetElement.addEventListener(interactionName, (e) => {
+            e.preventDefault();
             this.onInteractionEvent(interactionName, e.target.value);
         });
     }
@@ -39,5 +42,17 @@ export class Control {
                 }
             })
         );
+    }
+
+    /**
+     * Used to fire a stored trigger.
+     */
+    executeTrigger (triggerName, data) {
+        const triggerFunc = this.triggers[triggerName];
+        triggerFunc(data);
+    }
+
+    _setTrigger (triggerName, triggerFunc) {
+        this.triggers[triggerName] = triggerFunc;
     }
 }
