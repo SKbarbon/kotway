@@ -1,4 +1,10 @@
-from ..models import InteractionEvent, ElementPropType, EventCore, EventType, ObjectFit
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ..page import Page
+
+
+from ..models import *
 from ..custom_collections.sizeunit import SizeUnit, UnitType
 from ..custom_collections.color import Color
 from ..models.events.controlevent import *
@@ -7,10 +13,20 @@ import uuid, threading
 from enum import Enum
 
 class Control:
-    def __init__(self, width: SizeUnit = None, height: SizeUnit = None, object_fit: ObjectFit=None):
+    def __init__(self, width: SizeUnit = None, height: SizeUnit = None, object_fit: ObjectFit=None,
+                 padding: SizeUnit | int = None, margin: SizeUnit | int = None,
+                 background_color: Color = None, border_radius: SizeUnit | int = None,
+                 border_style: LineStyle = None, color: Color = None,
+                 cursor: Cursor | str = None, overflow: Overflow = None,
+                 position: Position = None, top: SizeUnit = None,
+                 right: SizeUnit | int = None,
+                bottom: SizeUnit | int = None,
+                left: SizeUnit | int = None,
+                outline_style: LineStyle = None,
+                font_size: SizeUnit | int = None):
         self.__unannounced_events: list[EventCore] = [] # Events to be sent on .update()
 
-        self.page = None
+        self.page: Page = None
         self.view = None
         self.parent: Control = None
 
@@ -20,10 +36,27 @@ class Control:
             ElementPropType.PROP: {},
             ElementPropType.STYLE: {}
         }
+
         self.interaction_handlers: dict[str, any] = {}
 
         self.width = width
         self.height = height
+        self.object_fit = object_fit
+        self.padding = padding
+        self.margin = margin
+        self.background_color = background_color
+        self.border_radius = border_radius
+        self.border_style = border_style
+        self.color = color
+        self.cursor = cursor
+        self.overflow = overflow
+        self.position = position
+        self.top = top
+        self.right = right
+        self.bottom = bottom
+        self.left = left
+        self.outline_style = outline_style
+        self.font_size = font_size
     
     def update (self):
         """Push an update event for the control's props."""
@@ -178,6 +211,14 @@ class Control:
         return self._set_prop_value(ElementPropType.STYLE, "border-style", value)
 
     @property
+    def border_color (self) -> str:
+        return self._get_prop_value(ElementPropType.STYLE, "border-color")
+
+    @border_color.setter
+    def border_color (self, value: Color):
+        self._set_prop_value(ElementPropType.STYLE, "border-color", value)
+
+    @property
     def outline_style (self) -> str:
         return self._get_prop_value(ElementPropType.STYLE, "outline-style")
 
@@ -192,3 +233,98 @@ class Control:
     @background_color.setter
     def background_color (self, value: Color):
         return self._set_prop_value(ElementPropType.STYLE, "background-color", value)
+
+    @property
+    def color (self) -> str:
+        return self._get_prop_value(ElementPropType.STYLE, "color")
+
+    @color.setter
+    def color (self, value: Color):
+        self._set_prop_value(ElementPropType.STYLE, "color", value)
+
+    @property
+    def font_size (self) -> str:
+        return self._get_prop_value(ElementPropType.STYLE, "font-size")
+
+    @font_size.setter
+    def font_size (self, value: SizeUnit | int):
+        if isinstance(value, int):
+            value = SizeUnit(UnitType.PX, value)
+        self._set_prop_value(ElementPropType.STYLE, "font-size", value)
+
+    
+    @property
+    def margin (self) -> str:
+        return self._get_prop_value(ElementPropType.STYLE, "margin")
+
+    @margin.setter
+    def margin (self, value: SizeUnit | int):
+        if isinstance(value, int):
+            value = SizeUnit(UnitType.PX, value)
+        self._set_prop_value(ElementPropType.STYLE, "margin", value)
+
+    @property
+    def cursor (self) -> str | Cursor:
+        """The visual of the cursor when hovering over the control."""
+        return self._get_prop_value(ElementPropType.STYLE, "cursor")
+
+    @cursor.setter
+    def cursor (self, value: Cursor | str):
+        self._set_prop_value(ElementPropType.STYLE, "cursor", value)
+
+    @property
+    def overflow (self):
+        return self._get_prop_value(ElementPropType.STYLE, "overflow")
+
+    @overflow.setter
+    def overflow (self, value):
+        self._set_prop_value(ElementPropType.STYLE, "overflow", value)
+
+    @property
+    def position (self):
+        return self._get_prop_value(ElementPropType.STYLE, "position")
+
+    @position.setter
+    def position (self, value: Position):
+        self._set_prop_value(ElementPropType.STYLE, "position", value)
+
+
+    @property
+    def top (self):
+        return self._get_prop_value(ElementPropType.STYLE, "top")
+
+    @top.setter
+    def top (self, value: SizeUnit | int):
+        if isinstance(value, int):
+            value = SizeUnit(UnitType.PX, value)
+        self._set_prop_value(ElementPropType.STYLE, "top", value)
+
+    @property
+    def right (self):
+        return self._get_prop_value(ElementPropType.STYLE, "right")
+
+    @right.setter
+    def right (self, value: SizeUnit | int):
+        if isinstance(value, int):
+            value = SizeUnit(UnitType.PX, value)
+        self._set_prop_value(ElementPropType.STYLE, "right", value)
+
+    @property
+    def bottom (self):
+        return self._get_prop_value(ElementPropType.STYLE, "bottom")
+
+    @bottom.setter
+    def bottom (self, value: SizeUnit | int):
+        if isinstance(value, int):
+            value = SizeUnit(UnitType.PX, value)
+        self._set_prop_value(ElementPropType.STYLE, "bottom", value)
+
+    @property
+    def left (self):
+        return self._get_prop_value(ElementPropType.STYLE, "left")
+
+    @left.setter
+    def left (self, value: SizeUnit | int):
+        if isinstance(value, int):
+            value = SizeUnit(UnitType.PX, value)
+        self._set_prop_value(ElementPropType.STYLE, "left", value)

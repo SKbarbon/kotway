@@ -7,18 +7,26 @@ from .control import Control
 
 
 class ParentControl (Control):
-    def __init__ (self, controls: list[Control] = None, display: DisplayType = DisplayType.FLEX, flex_direction: FlexDirection=FlexDirection.COLUMN,
-                  place_items: Alignment = None, *args, **kwargs: Unpack[ControlDefaultKwargs]):
+    def __init__ (self, controls: list[Control] = None, display: DisplayType = None, flex_direction: FlexDirection=None,
+                  place_items: Alignment = None, justify_content: Alignment = None, 
+                  align_items: Alignment = None, *args, **kwargs: Unpack[ControlDefaultKwargs]):
         super().__init__(*args, **kwargs)
 
         self.controls: list[Control] = ControlsList(
             on_append=self.__setup_control_child,
-            on_remove=lambda c: self.__remove_control_child(c)
+            on_remove=lambda c: self.__remove_control_child(c),
+            on_clear=self.clear
         )
 
         if controls != None:
             for added_control in controls:
                 self.controls.append(added_control)
+
+        self.display = display
+        self.flex_direction = flex_direction
+        self.place_items = place_items
+        self.justify_content = justify_content
+        self.align_items = align_items
 
 
     def update (self):
@@ -54,6 +62,11 @@ class ParentControl (Control):
         """Removes the control from the Parent then calls update."""
         self.controls.remove(control)
         self.update()
+
+    def clear (self):
+        """Remove all controls"""
+        for c in self.controls:
+            self.controls.remove(c)
 
     def __setup_control_child (self, control: Control):
         """Sets up and prepare a control to be a child of this control."""
@@ -103,3 +116,19 @@ class ParentControl (Control):
     @place_items.setter
     def place_items (self, value: Alignment):
         self._set_prop_value(ElementPropType.STYLE, "place-items", value)
+
+    @property
+    def justify_content (self):
+        return self._get_prop_value(ElementPropType.STYLE, "justify-content")
+
+    @justify_content.setter
+    def justify_content (self, value: Alignment):
+        return self._set_prop_value(ElementPropType.STYLE, "justify-content", value)
+
+    @property
+    def align_items (self) -> str:
+        return self._get_prop_value(ElementPropType.STYLE, "align-items")
+
+    @align_items.setter
+    def align_items (self, value: Alignment):
+        self._set_prop_value(ElementPropType.STYLE, "align-items", value)

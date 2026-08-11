@@ -1,5 +1,6 @@
 import {PageEventWorker} from "./events_workers/pageeventworker.js"
 import { ControlEventWorker } from "./events_workers/controleventworker.js";
+import { ClientEventType } from "./models/clientevent.js";
 
 export function eventExecutor (ev, page) {
     const event_type = ev["event_type"];
@@ -10,5 +11,11 @@ export function eventExecutor (ev, page) {
     }
     else if (event_type == "control_event") {
         new ControlEventWorker(event_data, page);
+    }
+    else if (event_type == "ping_event") {
+        page.announceClientEvent(
+            ClientEventType.PONG,
+            {}
+        )
     }
 }

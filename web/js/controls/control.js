@@ -1,5 +1,5 @@
 import { InteractionEvent } from "../models/interactionevent.js";
-
+import {ClientEventType} from "../models/clientevent.js";
 
 export class Control {
     constructor () {
@@ -31,8 +31,8 @@ export class Control {
     }
 
     onInteractionEvent (interactionName, interactionValue) {
-        this.page.announceInteractionEvent(
-            this,
+        this.page.announceClientEvent(
+            ClientEventType.INTERACTION,
             new InteractionEvent({
                 control_uuid: this.uuid,
                 interaction_name: interactionName,

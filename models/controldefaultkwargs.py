@@ -1,8 +1,25 @@
 from ..custom_collections.sizeunit import SizeUnit
 from ..models import ObjectFit
+from ..custom_collections.color import Color
+from ..models import *
 from typing import TypedDict, Unpack
 
 class ControlDefaultKwargs(TypedDict):
-    width: SizeUnit
-    height: SizeUnit
+    width: SizeUnit | int
+    height: SizeUnit | int
     object_fit: ObjectFit
+    padding: SizeUnit | int
+    margin: SizeUnit | int
+    background_color: Color
+    color: Color
+    border_radius: SizeUnit | int
+    border_style: LineStyle
+    border_color: Color
+    cursor: Cursor | str
+    overflow: Overflow
+    position: Position
+    top: SizeUnit | int
+    right: SizeUnit | int
+    bottom: SizeUnit | int
+    left: SizeUnit | int
+    outline_style = LineStyle

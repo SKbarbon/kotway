@@ -1,8 +1,10 @@
 from ..appadapter import AppAdapter
-from ...models import ClientEvent
-from flask import Flask, send_file, request, Response
+from ...models import ClientEvent, EventCore, EventType
+from flask import Flask, send_file, request, Response, url_for
 from flask_cors import CORS
 import os, json, time
+
+from .client_stream_manager import ClientStreamManager
 
 class FlaskAdapter (AppAdapter):
     def __init__(self):
@@ -28,11 +30,14 @@ class FlaskAdapter (AppAdapter):
             methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
         )
 
+        # Client Streams Managers
+        self.clients_streams_managers: dict[str, ClientStreamManager] = {}
+
 
     def _flask_catch (self, path="/"):
         if path == "" and request.method == "POST":
             event_data = ClientEvent(**request.get_json())
-            self.onClientEvent(event_data)
+            self.on_client_event(event_data)
             return {}
         elif path == "stream_events" and request.method == "POST":
             session_id = request.get_json()["sessionId"]
@@ -41,16 +46,24 @@ class FlaskAdapter (AppAdapter):
         if os.path.isfile(os.path.join(self.webapp_path, path)):
             return send_file(os.path.join(self.webapp_path, path))
 
-        session_id = self.create_session()
+        session_id = self.create_session(requested_route=request.path)
         return self.__get_index_content(session_id)
 
     def stream_events (self, session_id: str):
-        while True:
-            events = self.fetchSessionEvents(session_id)
+        stream_manager = ClientStreamManager(session_id)
+        self.clients_streams_managers[session_id] = stream_manager
+
+        while stream_manager.keep_alive:
+            events = self.fetch_session_events(session_id)
+            if stream_manager.should_ask_for_ping and stream_manager.ping_request_sent == False:
+                events.append(EventCore(event_type=EventType.PING_EVENT, data={}))
+                stream_manager.ping_request_sent = True
+            
             if events != []:
                 response = {"events": [e.model_dump(mode='json') for e in events]}
                 yield f"{json.dumps(response)}\n\n"
 
+            stream_manager.update()
             time.sleep(0.05)
 
     def start(self):
@@ -60,6 +73,11 @@ class FlaskAdapter (AppAdapter):
             threaded=True,
             host="localhost"
         )
+
+    def on_client_pong(self, session_id):
+        if session_id in self.clients_streams_managers:
+            sm = self.clients_streams_managers[session_id]
+            sm.pong()
 
 
     def __get_index_content (self, session_id: str) -> str:

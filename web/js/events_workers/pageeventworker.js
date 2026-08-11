@@ -13,6 +13,10 @@ export class PageEventWorker {
             const viewRoute = pageEvent.data.view_route;
             this.presentRouteView(viewRoute)
         }
+        else if (pageEvent.event_name == "remove_view") {
+            const viewUuid = pageEvent.data.view_uuid;
+            this.page.removeView(viewUuid);
+        }
     }
 
     addNewView (view_data) {

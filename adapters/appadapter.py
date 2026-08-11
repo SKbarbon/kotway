@@ -17,18 +17,30 @@ AppAdapter allows the app to interact with events though API. For example, the d
         pass
 
     # Events
-    def create_session (self) -> str:
-        return self.app_class.start_new_page_session().session_id
+    def create_session (self, requested_route: str) -> str:
+        return self.app_class.start_new_page_session(requested_route=requested_route).session_id
 
-    def sendHostEvent (self, e: EventCore):
+    def send_host_event (self, e: EventCore):
         pass
 
-    def onClientEvent (self, e: ClientEvent):
+    def on_client_event (self, e: ClientEvent):
+        """Handle events sent by the client."""
+        # When event is pong.
+        if e.event_type == ClientEventType.PONG:
+            self.on_client_pong(session_id=e.sessionId)
+            return
+
+        # Handle other event types
+        page = self.app_class.get_page_by_sessionid(e.sessionId)
+        if page == None: return
+
         if e.event_type == ClientEventType.INTERACTION:
-            page = self.app_class.get_page_by_sessionid(e.sessionId)
             page.fire_interaction_event(InteractionEvent(**e.event_data))
 
-    def fetchSessionEvents (self, session_id: str):
+    def on_client_pong (self, session_id: str):
+        """When a client responed for a Ping event. Override by custom adapters."""
+
+    def fetch_session_events (self, session_id: str):
         """The adapter calls this in a loop to check for new events."""
         page: Page = self.app_class.get_page_by_sessionid(session_id)
         if page != None:

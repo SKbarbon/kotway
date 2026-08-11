@@ -35,3 +35,10 @@ class SizeUnit (str):
         obj.unit_type = unit_type
         obj.size = size
         return obj
+
+    @classmethod
+    def number (self, value: str) -> int:
+        """Gets the raw string value and fetch the number from it."""
+        for t in UnitType:
+            if value.endswith(t.value):
+                return int(value.lower().removesuffix(t.value))

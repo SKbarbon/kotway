@@ -1,14 +1,23 @@
 import {ClientEvent, ClientEventType} from "./models/clientevent.js";
 import { findControlByUuid } from "./utils/findcontrolbyuuid.js";
 import { FatalErrorMessageView } from "./custom_views/fatalerrormessageview.js";
+import { Window } from "./controls/window.js";
 
 export class Page {
     constructor (adapterTransport) {
         this.adapterTransport = adapterTransport;
+        this.window = new Window(this);
+        
         this.views = [];
         this.currentRoute = "";
 
         this.viewsContainer = document.getElementById("VIEWS_CONTAINER");
+
+        // Listen to page route changes.
+        window.addEventListener("popstate", (event) => {
+            const routeName = window.location.pathname;
+            this.presentRouteView(routeName);
+        });
     }
 
     getSessionId () {
@@ -20,12 +29,19 @@ export class Page {
         this.views.push(view);
     }
 
+    removeView (viewUuid) {
+        const view = this.getControlByUuid(viewUuid);
+        this.views = this.views.filter(item => item !== view);
+    }
+
     presentRouteView (route) {
         const v = this.getViewByRoute(route);
         this.viewsContainer = document.getElementById("VIEWS_CONTAINER");
         this.viewsContainer.replaceChildren();
 
         this.viewsContainer.append(v.htmlElement);
+
+        history.pushState({ page: 1 }, "", v.route);
     }
 
     getViewByRoute (route) {
@@ -37,6 +53,7 @@ export class Page {
     }
 
     getControlByUuid (uuid) {
+        if (uuid == "WINDOW") {return this.window;}
         for (const v of this.views) {
             if (v.uuid == uuid) {return v;}
             const found = findControlByUuid(uuid, v.controls);
@@ -51,12 +68,12 @@ export class Page {
      * 
      * interactionData: InteractionEvent class.
      */
-    announceInteractionEvent (control, interactionData) {
+    announceClientEvent (event_type, data) {
         const clientEvent = new ClientEvent({
             sessionId: this.getSessionId(),
             event_time: Date.now(),
-            event_type: ClientEventType.INTERACTION,
-            event_data: interactionData
+            event_type: event_type,
+            event_data: data
         })
         this.adapterTransport.sendClientEvent(clientEvent);
     }

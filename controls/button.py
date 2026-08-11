@@ -1,16 +1,18 @@
 from ..models import ElementPropType
 from .parentcontrol import ParentControl
+from ..models.properties.cursor import Cursor
 from ..models.parentcontroldefaultkwargs import CombinedControlKwargs, Unpack
 
 
 class Button (ParentControl):
     """A button"""
-    def __init__(self, on_click=None, *args, **kwargs: Unpack[CombinedControlKwargs]):
+    def __init__(self, on_click=None, cursor: Cursor | str = Cursor.POINTER, *args, **kwargs: Unpack[CombinedControlKwargs]):
         super().__init__(*args, **kwargs)
         self.on_click = on_click
 
-        self.display = None
-        self.flex_direction = None
+        # self.display = None
+        # self.flex_direction = None
+        self.cursor = cursor
 
 
     @property

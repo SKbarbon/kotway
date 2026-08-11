@@ -29,10 +29,17 @@ class App ():
 
 
     # == Adapter APIs ==
-    def start_new_page_session (self) -> Page:
-        new_page = Page(str(uuid.uuid4()))
+    def start_new_page_session (self, requested_route: str) -> Page:
+        new_page = Page(
+            session_id=str(uuid.uuid4()),
+            requested_route=requested_route
+        )
 
-        threading.Thread(target=self.target, args={new_page}, daemon=True).start()
+        def run_target ():
+            self.target(new_page)
+            new_page._client_changed_route(requested_route, None)
+
+        threading.Thread(target=run_target, daemon=True).start()
 
         self.active_pages[new_page.session_id] = new_page
         return new_page

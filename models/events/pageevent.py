@@ -4,13 +4,14 @@ from enum import Enum
 class PageEventName (Enum):
     ADD_VIEW = "add_view"
     PRESENT_VIEW = "present_view"
+    REMOVE_VIEW = "remove_view"
 
 class PageEvent (BaseModel):
     event_name: PageEventName
     data: dict
 
 
-class PageEventAddView (BaseModel):
+class PageEventDefineView (BaseModel):
     view_route: str
     view_uuid: str
 

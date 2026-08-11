@@ -4,8 +4,9 @@ import uuid, time
 
 class EventType (Enum):
     PAGE_EVENT = "page_event"
-    VIEW_EVENT = "view_event"
     CONTROL_EVENT = "control_event"
+    PING_EVENT = "ping_event"
+    """Can be used by custom adapters to ask for a ping from the client."""
 
 class EventCore (BaseModel):
     event_id: str = Field(default_factory=lambda: str(uuid.uuid4()))

@@ -1,7 +1,9 @@
 
 
 export const ClientEventType = Object.freeze({
-    INTERACTION: "interaction"
+    INTERACTION: "interaction",
+    CLIENT_PAGE: "client_page",
+    PONG: "pong"
 });
 
 export class ClientEvent {
