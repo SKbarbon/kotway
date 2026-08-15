@@ -1,5 +1,7 @@
 from ..models import EventCore, ClientEvent, ClientEventType, InteractionEvent
+from ..models.events.client_events.clientpageevent import ClientPageEvent
 from ..page import Page
+import traceback
 
 class AppAdapter:
     """
@@ -9,6 +11,7 @@ AppAdapter allows the app to interact with events though API. For example, the d
         self.__port = None
         self.__webapp_path = None
         self.app_class = None
+        self.debug: bool = True
 
     def start (self):
         """Start the adapter.
@@ -23,19 +26,32 @@ AppAdapter allows the app to interact with events though API. For example, the d
     def send_host_event (self, e: EventCore):
         pass
 
+
     def on_client_event (self, e: ClientEvent):
         """Handle events sent by the client."""
+        try: self.__on_client_event(e)
+        except:
+            if self.debug:
+                traceback.print_exc()
+                self.on_client_session_end(e.sessionId)
+                print("The client sent non-valid data. Therefor the session is ended.")
+
+    def __on_client_event (self, e: ClientEvent):
+        """The worker for handling client events."""
         # When event is pong.
         if e.event_type == ClientEventType.PONG:
             self.on_client_pong(session_id=e.sessionId)
             return
 
         # Handle other event types
-        page = self.app_class.get_page_by_sessionid(e.sessionId)
+        page: Page = self.app_class.get_page_by_sessionid(e.sessionId)
         if page == None: return
 
         if e.event_type == ClientEventType.INTERACTION:
             page.fire_interaction_event(InteractionEvent(**e.event_data))
+
+        elif e.event_type == ClientEventType.CLIENT_PAGE:
+            page._handle_client_page_event(ev=ClientPageEvent(**e.event_data))
 
     def on_client_pong (self, session_id: str):
         """When a client responed for a Ping event. Override by custom adapters."""
@@ -47,6 +63,11 @@ AppAdapter allows the app to interact with events though API. For example, the d
             return page.fetch_events_clean()
         else:
             return []
+
+
+    def on_client_session_end (self, session_id):
+        """Do cleanup after a session is done"""
+        self.app_class.remove_page_session(session_id)
 
     # Props
     @property

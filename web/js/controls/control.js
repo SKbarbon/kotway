@@ -10,6 +10,7 @@ export class Control {
         this.view = null;
         this.parent = null;
 
+        this.interaEventListenersControllers = {} // eventName: str, controller: AbortController
         this.triggers = {}; // triggerName: str, triggerFunction: void
     }
     
@@ -22,12 +23,39 @@ export class Control {
         }
     }
 
-    listenToInteractionEvent (targetElement, interactionName) {
-        if (targetElement == null) {targetElement=this.htmlElement}
+    removeProp (proptype, propName) {
+        if (proptype == "prop") {
+            this.htmlElement.removeAttribute(propName);
+        }
+        else if (proptype == "style") {
+            this.htmlElement.style.removeProperty(propName);
+        }
+    }
+
+    listenToInteractionEvent (interactionName, targetElement) {
+        if (targetElement == null) {targetElement=this.htmlElement;}
+
+        // Remove existing event if its there.
+        this.removeInteractionEventListener(
+            interactionName,
+            targetElement
+        );
+
+        // Assign new event listner.
+        const controller = new AbortController();
+        this.interaEventListenersControllers[interactionName] = controller;
         targetElement.addEventListener(interactionName, (e) => {
             e.preventDefault();
             this.onInteractionEvent(interactionName, e.target.value);
-        });
+        }, { signal: controller.signal });
+    }
+
+    removeInteractionEventListener (interactionEvent, targetElement) {
+        if (targetElement == null) {targetElement=this.htmlElement;}
+
+        if (interactionEvent in this.interaEventListenersControllers) {
+            this.interaEventListenersControllers[interactionEvent].abort()
+        }
     }
 
     onInteractionEvent (interactionName, interactionValue) {

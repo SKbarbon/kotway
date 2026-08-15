@@ -5,6 +5,7 @@ from .view import View
 from .container import Container
 
 from .text import Text
+from .anchor import Anchor
 
 from .textfield import TextField
 from .button import Button

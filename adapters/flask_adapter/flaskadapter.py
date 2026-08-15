@@ -36,7 +36,8 @@ class FlaskAdapter (AppAdapter):
 
     def _flask_catch (self, path="/"):
         if path == "" and request.method == "POST":
-            event_data = ClientEvent(**request.get_json())
+            try: event_data = ClientEvent(**request.get_json())
+            except: return
             self.on_client_event(event_data)
             return {}
         elif path == "stream_events" and request.method == "POST":
@@ -53,18 +54,21 @@ class FlaskAdapter (AppAdapter):
         stream_manager = ClientStreamManager(session_id)
         self.clients_streams_managers[session_id] = stream_manager
 
-        while stream_manager.keep_alive:
-            events = self.fetch_session_events(session_id)
-            if stream_manager.should_ask_for_ping and stream_manager.ping_request_sent == False:
-                events.append(EventCore(event_type=EventType.PING_EVENT, data={}))
-                stream_manager.ping_request_sent = True
-            
-            if events != []:
-                response = {"events": [e.model_dump(mode='json') for e in events]}
-                yield f"{json.dumps(response)}\n\n"
+        try:
+            while stream_manager.keep_alive:
+                events = self.fetch_session_events(session_id)
+                if stream_manager.should_ask_for_ping and stream_manager.ping_request_sent == False:
+                    events.append(EventCore(event_type=EventType.PING_EVENT, data={}))
+                    stream_manager.ping_request_sent = True
+                
+                if events != []:
+                    response = {"events": [e.model_dump(mode='json') for e in events]}
+                    yield f"{json.dumps(response)}\n\n"
 
-            stream_manager.update()
-            time.sleep(0.05)
+                stream_manager.update()
+                time.sleep(0.05)
+        finally:
+            self.on_client_session_end(session_id)
 
     def start(self):
         self.flask_app.run(
@@ -78,6 +82,12 @@ class FlaskAdapter (AppAdapter):
         if session_id in self.clients_streams_managers:
             sm = self.clients_streams_managers[session_id]
             sm.pong()
+
+    def on_client_session_end(self, session_id):
+        super().on_client_session_end(session_id)
+        if session_id in self.clients_streams_managers:
+            self.clients_streams_managers[session_id].keep_alive = False
+            del self.clients_streams_managers[session_id]
 
 
     def __get_index_content (self, session_id: str) -> str:

@@ -6,8 +6,9 @@ from .utils.get_webapp_path import get_webapp_path
 
 class App ():
     """The manager for kotway app pages."""
-    def __init__(self, target, custom_adapter=None, webapp_path: str=None):
+    def __init__(self, target, custom_adapter=None, webapp_path: str=None, debug: bool = True):
         self.target = target
+        self.debug = debug
 
         if custom_adapter == None:
             self.app_adapter: AppAdapter = FlaskAdapter()
@@ -25,24 +26,30 @@ class App ():
         self.app_adapter.port = port
         self.app_adapter.webapp_path = self.webapp_path
         self.app_adapter.app_class = self
+        self.app_adapter.debug = self.debug
         self.app_adapter.start()
 
 
     # == Adapter APIs ==
     def start_new_page_session (self, requested_route: str) -> Page:
         new_page = Page(
-            session_id=str(uuid.uuid4()),
-            requested_route=requested_route
+            session_id=str(uuid.uuid4())
         )
 
         def run_target ():
             self.target(new_page)
-            new_page._client_changed_route(requested_route, None)
+            new_page._client_changed_route(requested_route)
 
         threading.Thread(target=run_target, daemon=True).start()
 
         self.active_pages[new_page.session_id] = new_page
         return new_page
+
+    def remove_page_session (self, session_id: str):
+        if session_id in self.active_pages:
+            page = self.active_pages[session_id]
+            threading.Thread(target=page.on_session_end, daemon=True).start()
+            del self.active_pages[session_id]
 
     def get_page_by_sessionid (self, session_id):
         if session_id in self.active_pages:

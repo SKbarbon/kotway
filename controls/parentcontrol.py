@@ -1,4 +1,6 @@
 from ..custom_collections.controlslist import ControlsList
+from ..custom_collections.sizeunit import SizeUnit
+from ..custom_collections.flex import Flex
 from ..models.controldefaultkwargs import ControlDefaultKwargs, Unpack
 from ..models.events.controlevent import *
 from ..models import ElementPropType, DisplayType, FlexDirection, Alignment
@@ -7,10 +9,14 @@ from .control import Control
 
 
 class ParentControl (Control):
-    def __init__ (self, controls: list[Control] = None, display: DisplayType = None, flex_direction: FlexDirection=None,
+    def __init__ (self, controls: list[Control] = None, display: DisplayType | None = None, 
+                flex_direction: FlexDirection | None = None,
                   place_items: Alignment = None, justify_content: Alignment = None, 
-                  align_items: Alignment = None, *args, **kwargs: Unpack[ControlDefaultKwargs]):
-        super().__init__(*args, **kwargs)
+                  align_items: Alignment = None, 
+                  flex: Flex | None | str = None, 
+                  margin: SizeUnit | int | None = 5,
+                  *args, **kwargs: Unpack[ControlDefaultKwargs]):
+        super().__init__(margin=margin, *args, **kwargs)
 
         self.controls: list[Control] = ControlsList(
             on_append=self.__setup_control_child,
@@ -27,6 +33,7 @@ class ParentControl (Control):
         self.place_items = place_items
         self.justify_content = justify_content
         self.align_items = align_items
+        self.flex = flex
 
 
     def update (self):
@@ -96,6 +103,14 @@ class ParentControl (Control):
     @display.setter
     def display (self, value: DisplayType):
         self._set_prop_value(ElementPropType.STYLE, prop_name="display", value=value)
+
+    @property
+    def flex (self):
+        return self._get_prop_value(ElementPropType.STYLE, "flex")
+
+    @flex.setter
+    def flex (self, value: Flex | None | str):
+        self._set_prop_value(ElementPropType.STYLE, "flex", value)
 
     @property
     def flex_direction (self) -> FlexDirection:

@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ..page import Page
-
+from collections.abc import Callable
 
 from ..models import *
 from ..custom_collections.sizeunit import SizeUnit, UnitType
@@ -23,7 +23,10 @@ class Control:
                 bottom: SizeUnit | int = None,
                 left: SizeUnit | int = None,
                 outline_style: LineStyle = None,
-                font_size: SizeUnit | int = None):
+                font_size: SizeUnit | int = None,
+                text_align: Alignment = None,
+
+                on_click: Callable[[InteractionEvent], None] = None):
         self.__unannounced_events: list[EventCore] = [] # Events to be sent on .update()
 
         self.page: Page = None
@@ -57,6 +60,9 @@ class Control:
         self.left = left
         self.outline_style = outline_style
         self.font_size = font_size
+        self.text_align = text_align
+
+        self.on_click = on_click
     
     def update (self):
         """Push an update event for the control's props."""
@@ -82,15 +88,35 @@ class Control:
         return str(type(self).__name__)
 
     def _set_prop_value (self, prop_type: ElementPropType, prop_name: str, value):
-        self.current_props[prop_type][prop_name] = value
+        if value == None:
+            if prop_name in self.current_props[prop_type]:
+                del self.current_props[prop_type][prop_name]
+            self._add_control_event(
+                event_name=ControlEventName.REMOVE_PROP,
+                event_data=ControlEventDataRemoveProp(
+                    prop_type=prop_type,
+                    prop_name=prop_name
+                ).model_dump()
+            )
+        else:
+            self.current_props[prop_type][prop_name] = value
 
     def _get_prop_value (self, prop_type: ElementPropType, prop_name: str):
         if prop_name not in self.current_props[prop_type]:
             return None
         return self.current_props[prop_type][prop_name]
 
-    def _set_interaction_handler (self, interaction_name: str, handler_function):
+    def _set_interaction_handler (self, interaction_name: str, handler_function, custom_interaction: bool = False):
         self.interaction_handlers[interaction_name] = handler_function
+
+        if not custom_interaction:
+            self._add_control_event(
+                event_name=ControlEventName.SET_INTERACTION_EVENT,
+                event_data=ControlEventDataSetInteractionEv(
+                    interaction_name=interaction_name,
+                    active=(True if handler_function != None else False)
+                ).model_dump()
+            )
 
     def _get_interaction_handler (self, interaction_name: str):
         return self.interaction_handlers[interaction_name]
@@ -107,7 +133,7 @@ class Control:
         self.send_unannounced_event_inevitably(ev)
 
     def _add_control_event (self, event_name: ControlEventName, event_data: dict):
-        """Announce a control event in the page cache.
+        """Cache a control event to be announced.
         
         Returns the created event model."""
         ce = ControlEvent(
@@ -328,3 +354,20 @@ class Control:
         if isinstance(value, int):
             value = SizeUnit(UnitType.PX, value)
         self._set_prop_value(ElementPropType.STYLE, "left", value)
+
+    @property
+    def text_align (self):
+        return self._get_prop_value(ElementPropType.STYLE, "text-align")
+
+    @text_align.setter
+    def text_align (self, value: Alignment):
+        self._set_prop_value(ElementPropType.STYLE, "text-align", value)
+
+    # EVENT HANDLERS
+    @property
+    def on_click (self):
+        return self._get_interaction_handler("click")
+
+    @on_click.setter
+    def on_click (self, value):
+        self._set_interaction_handler("click", value)

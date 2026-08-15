@@ -12,17 +12,21 @@ export class TextField extends Control {
         const interactionEvents = ["input", "change"];
         interactionEvents.forEach(ie => {
             this.listenToInteractionEvent(
-                this.fieldElem,
-                ie
+                ie,
+                this.fieldElem
             )
         });
         
         this.listenToInteractionEvent(
-            null,
-            "submit"
+            "submit",
+            null
         )
 
         this._setTrigger("focus", this.toggleFocus.bind(this));
+
+        // Can't remove or modify the activation of textfield events as their customized.
+        // this.listenToInteractionEvent = function() {};
+        // this.removeInteractionEventListener = function() {};
     }
 
     updateProp (proptype, propName, propValue) {
@@ -31,6 +35,15 @@ export class TextField extends Control {
         }
         else if (proptype == "style") {
             this.fieldElem.style.setProperty(propName, propValue);
+        }
+    }
+
+    removeProp (proptype, propName) {
+        if (proptype == "prop") {
+            this.fieldElem.removeAttribute(propName);
+        }
+        else if (proptype == "style") {
+            this.fieldElem.style.removeProperty('color');
         }
     }
 

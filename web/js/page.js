@@ -2,6 +2,7 @@ import {ClientEvent, ClientEventType} from "./models/clientevent.js";
 import { findControlByUuid } from "./utils/findcontrolbyuuid.js";
 import { FatalErrorMessageView } from "./custom_views/fatalerrormessageview.js";
 import { Window } from "./controls/window.js";
+import { ClientPageEvent, ClientPageEventName, ClientPageEventUnhandeldRoute } from "./models/clientpageevent.js";
 
 export class Page {
     constructor (adapterTransport) {
@@ -16,7 +17,7 @@ export class Page {
         // Listen to page route changes.
         window.addEventListener("popstate", (event) => {
             const routeName = window.location.pathname;
-            this.presentRouteView(routeName);
+            this.presentRouteView(routeName, false);
         });
     }
 
@@ -34,14 +35,35 @@ export class Page {
         this.views = this.views.filter(item => item !== view);
     }
 
-    presentRouteView (route) {
-        const v = this.getViewByRoute(route);
+    presentRouteView (route, updateState) {
+        let v;
+        try {
+            v = this.getViewByRoute(route);
+        }
+        catch {
+            v = null;
+        }
+        if (v == null) {
+            this.announceClientEvent(
+                ClientEventType.CLIENT_PAGE,
+                new ClientPageEvent({
+                    event_name: ClientPageEventName.UNHANDLED_ROUTE,
+                    data: new ClientPageEventUnhandeldRoute({
+                        route: route
+                    })
+                })
+            );
+            return;
+        }
         this.viewsContainer = document.getElementById("VIEWS_CONTAINER");
         this.viewsContainer.replaceChildren();
 
         this.viewsContainer.append(v.htmlElement);
+        if (updateState != false) {
+            history.pushState({ page: 1 }, "", v.route); 
+        }
 
-        history.pushState({ page: 1 }, "", v.route);
+        v.announcePresent();
     }
 
     getViewByRoute (route) {
@@ -50,6 +72,12 @@ export class Page {
             return view;
         }
         console.error("There is no found View for the route: "+route)
+    }
+
+    isRouteExist (route) {
+        const view = this.views.find(v => v.route === route);
+        if (view == null) {return false;}
+        return true;
     }
 
     getControlByUuid (uuid) {
@@ -83,6 +111,14 @@ export class Page {
      * @param {*} errorContent Error message.
      */
     displayErrorPage (errorContent) {
+        const errorRoute = "/error"
+        // if there is a custom error page, present it.
+        if (this.isRouteExist(errorRoute)) {
+            this.presentRouteView(errorRoute)
+            return;
+        }
+
+        // else, present default error page.
         const erv = new FatalErrorMessageView(errorContent);
         this.addView(erv);
         this.presentRouteView(erv.route);

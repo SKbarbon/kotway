@@ -6,9 +6,9 @@ export class Button extends ParentControl {
         super();
         this.htmlElement = document.createElement("button");
         
-        this.listenToInteractionEvent(
-            null,
-            "click"
-        )
+        // this.listenToInteractionEvent(
+        //     null,
+        //     "click"
+        // )
     }
 }

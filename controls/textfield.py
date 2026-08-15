@@ -51,7 +51,7 @@ class TextField (Control):
 
     @on_change.setter
     def on_change (self, value):
-        self._set_interaction_handler("change", value)
+        self._set_interaction_handler("change", value, custom_interaction=True)
 
     @property
     def on_submit (self):
@@ -60,7 +60,7 @@ class TextField (Control):
 
     @on_submit.setter
     def on_submit (self, value):
-        self._set_interaction_handler("submit", value)
+        self._set_interaction_handler("submit", value, custom_interaction=True)
 
 
     @property
@@ -70,7 +70,7 @@ class TextField (Control):
 
     @on_input.setter
     def on_input (self, value):
-        self._set_interaction_handler("input", value)
+        self._set_interaction_handler("input", value, custom_interaction=True)
 
     def _on_client_interaction(self, e: InteractionEvent):
         if e.interaction_name == "input":

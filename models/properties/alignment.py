@@ -5,3 +5,5 @@ class Alignment (Enum):
     START = "start"
     CENTER = "center"
     END = "end"
+
+    JUSTIFY = "justify"

@@ -1,17 +1,19 @@
 from .models import EventCore, EventType, InteractionEvent
 from .utils.find_control_by_uuid import find_control_by_uuid
 from .models.events.pageevent import *
+from .models.events.client_events.clientpageevent import *
 from .controls.window import Window
 from .custom_collections.viewslist import ViewsList
 from .controls import Control, View
 
+from collections.abc import Callable
 import threading
 
 class Page:
     """
 A Page is a session and views container.
     """
-    def __init__(self, session_id: str, requested_route: str):
+    def __init__(self, session_id: str):
         self.__session_id: str = session_id
         self.__next_events: list[EventCore] = []
 
@@ -23,17 +25,16 @@ A Page is a session and views container.
         self.views.append(View("/"))
 
         self.__current_route: str = "/"
-        self.__href: str = ""
 
         self.update()
         self.present_view("/")
 
         # Events
-        self.on_unhandled_route_change = None
+        self.on_unhandled_route_change: Callable[[str], None] = None
         """When the client goes to a route that has no view."""
 
-        self.on_route_change = None
-        """When the client goes to a route that has an existed view, and the transition managed automatically."""
+        self.on_session_end: Callable[[], None] = None
+        """When the client is already out and disconnected."""
 
     # utils
     def update (self):
@@ -79,6 +80,8 @@ A Page is a session and views container.
         )
         self.add_event(event)
 
+        view.update()
+
     def push_page_exception (self, exc: str, traceback: str = ""):
         raise Exception(f"{traceback}\n\n{exc}")
 
@@ -92,7 +95,6 @@ A Page is a session and views container.
     def fetch_events_clean (self) -> list[EventCore]:
         """Returns a list of next events, ordered in events time, then clean the events cache."""
         current_events = self.__next_events.copy()
-        current_events.sort(key=lambda event: event.event_time)
         self.__next_events.clear()
         return current_events
 
@@ -112,7 +114,9 @@ A Page is a session and views container.
                           data=page_event.model_dump())
         self.add_event(event)
 
-    def present_view (self, view_route: str):
+    def present_view (self, view_route: str | View):
+        if isinstance(view_route, View):
+            view_route = view_route.route
         self.get_route_view(view_route)
 
         page_present_event = PageEventPresentView(view_route=view_route)
@@ -124,6 +128,10 @@ A Page is a session and views container.
         control: Control = self.get_control_by_uuid(event_data.control_uuid)
         control._on_client_interaction(event_data)
 
+    def _handle_client_page_event (self, ev: ClientPageEvent):
+        if ev.event_name == ClientPageEventName.UNHANDLED_ROUTE:
+            data = ClientPageEventUnhandeldRoute(**ev.data)
+            self.__run_event_handler(self.on_unhandled_route_change, data.route)
 
     def get_control_by_uuid (self, uuid:str):
         if uuid == "WINDOW": return self.window
@@ -141,12 +149,17 @@ A Page is a session and views container.
         return False
 
 
-    def _client_changed_route (self, route: str, handled: bool):
-        """Fired by the adapter when the client change the route."""
-        if handled == None and route == "/": handled = True
+    def _client_changed_route (self, route: str, informative: bool = False):
+        """Fired by the adapter when the client change the route.
+        
+        if informative, the page.current_route will be updated only with no more actions."""
+        if informative:
+            self.__current_route = route
+            return
+        if route == "/": return
 
-        if handled:
-            self.__run_event_handler(self.on_route_change, route)
+        if self.is_route_exist(route):
+            self.present_view(route)
         else:
             self.__run_event_handler(self.on_unhandled_route_change, route)
 
@@ -164,7 +177,6 @@ A Page is a session and views container.
     def __run_event_handler (self, func, *args):
         if func == None: return
         threading.Thread(target=func, args=args, daemon=True).start()
-
     # Props
 
     @property
@@ -178,8 +190,3 @@ A Page is a session and views container.
     @property
     def current_route (self) -> str:
         return self.__current_route
-
-    @property
-    def href (self) -> str:
-        """The href which the client is at. Updated by the client only."""
-        self.__href

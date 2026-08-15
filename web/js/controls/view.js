@@ -12,4 +12,14 @@ export class View extends ParentControl{
         super.addControl(control)
         control.view = this;
     }
+
+    /**
+     * Push an interaction event announcing that this View is currently presented.
+     */
+    announcePresent () {
+        this.onInteractionEvent(
+            "presented",
+            {}
+        )
+    }
 }

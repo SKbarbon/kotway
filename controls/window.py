@@ -25,8 +25,13 @@ class Window (Control):
 
 
     def exchange_window_size (self):
-        """Fires a trigger event that tells the client's window to push the current sizes."""
+        """Fires a trigger to get on_resize event with current window size.."""
         self._execute_trigger("exchange_window_size", {})
+
+    def set_realtime_size_listener (self, state: bool):
+        """Start getting realtime interaction events for on_resize when a resize happens"""
+        self._execute_trigger("realtime_size_listener", {"state": state})
+
 
     @property
     def on_resize (self):

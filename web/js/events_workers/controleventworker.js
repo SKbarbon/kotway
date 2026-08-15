@@ -20,6 +20,27 @@ export class ControlEventWorker {
             const evData = ev.data;
             this.selectedControl.executeTrigger(evData.trigger_name, evData.data);
         }
+        else if (ev.event_name == "set_interaction_event") {
+            const interactionName = ev.data.interaction_name;
+            const active = ev.data.active;
+            if (active == true) {
+                this.selectedControl.listenToInteractionEvent (
+                    interactionName
+                )
+            }
+            else {
+                this.selectedControl.removeInteractionEventListener (
+                    interactionName
+                )
+            }
+        }
+        else if (ev.event_name == "remove_prop") {
+            this.selectedControl.removeProp (ev.data.prop_type, ev.data.prop_name);
+        }
+
+        else {
+            console.debug("Unknown event: " + ev.event_name)
+        }
     }
 
     updateControlProps (eventData) {

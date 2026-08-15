@@ -8,6 +8,8 @@ export class Window extends Control {
         this.page = page;
         this.htmlElement = window;
 
+        this.realtime_size_event_active = false;
+
         const observer = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 // Gives exact content area dimensions post-layout
@@ -15,7 +17,9 @@ export class Window extends Control {
                 
                 requestAnimationFrame(() => {
                     requestAnimationFrame(() => {
-                        this._sendWindowSize();
+                        if (this.realtime_size_event_active == true) {
+                            this._sendWindowSize();
+                        }
                     });
                 });
             }
@@ -24,12 +28,18 @@ export class Window extends Control {
         // Observe the root HTML element
         observer.observe(document.documentElement);
 
-        this._setTrigger("exchange_window_size", this.triggerWindowSize.bind(this))
+        this._setTrigger("exchange_window_size", this.triggerWindowSize.bind(this));
+        this._setTrigger("realtime_size_listener", this.setRealtimeSizeListener.bind(this))
+
         this._sendWindowSize();
     }
 
     triggerWindowSize () {
         this._sendWindowSize ()
+    }
+
+    setRealtimeSizeListener(data) {
+        this.realtime_size_event_active = data.state;
     }
 
     _sendWindowSize () {

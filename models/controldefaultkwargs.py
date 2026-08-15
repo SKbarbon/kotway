@@ -1,5 +1,7 @@
+from collections.abc import Callable
+
 from ..custom_collections.sizeunit import SizeUnit
-from ..models import ObjectFit
+from ..models import ObjectFit, InteractionEvent
 from ..custom_collections.color import Color
 from ..models import *
 from typing import TypedDict, Unpack
@@ -22,4 +24,7 @@ class ControlDefaultKwargs(TypedDict):
     right: SizeUnit | int
     bottom: SizeUnit | int
     left: SizeUnit | int
-    outline_style = LineStyle
+    outline_style: LineStyle
+    text_align: Alignment
+
+    on_click: Callable[[InteractionEvent], None]
