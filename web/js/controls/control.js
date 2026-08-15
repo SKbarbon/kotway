@@ -46,7 +46,7 @@ export class Control {
         this.interaEventListenersControllers[interactionName] = controller;
         targetElement.addEventListener(interactionName, (e) => {
             e.preventDefault();
-            this.onInteractionEvent(interactionName, e.target.value);
+            this.onInteractionEvent(interactionName, e.key, e.target.value);
         }, { signal: controller.signal });
     }
 
@@ -58,15 +58,15 @@ export class Control {
         }
     }
 
-    onInteractionEvent (interactionName, interactionValue) {
+    onInteractionEvent (interactionName, eventName, eventValue) {
         this.page.announceClientEvent(
             ClientEventType.INTERACTION,
             new InteractionEvent({
                 control_uuid: this.uuid,
                 interaction_name: interactionName,
                 data: {
-                    interactionName: interactionName,
-                    interactionValue: interactionValue
+                    eventName: eventName,
+                    value: eventValue
                 }
             })
         );

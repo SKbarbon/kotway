@@ -1,4 +1,4 @@
-from ..controls.view import View
+from ..core.controls.view import View
 
 class ViewsList (list):
     def __init__(self, on_remove, *args, **kwargs):

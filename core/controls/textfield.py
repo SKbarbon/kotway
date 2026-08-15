@@ -1,5 +1,5 @@
-from ..models.controldefaultkwargs import ControlDefaultKwargs, Unpack
-from ..models import InteractionEvent
+from ...models.controldefaultkwargs import ControlDefaultKwargs, Unpack
+from ...models import InteractionEvent
 from .control import Control, ElementPropType
 from pydantic import BaseModel
 
@@ -26,6 +26,12 @@ class TextField (Control):
         """Remove the pointer from the field"""
         self._execute_trigger("focus", FieldFocusData(state=False).model_dump())
 
+
+    def _on_client_interaction(self, e: InteractionEvent):
+        if e.interaction_name == "input":
+            self.value = e.data["value"]
+        super()._on_client_interaction(e)
+
     @property
     def value (self) -> str:
         """The text value of the TextField"""
@@ -51,16 +57,7 @@ class TextField (Control):
 
     @on_change.setter
     def on_change (self, value):
-        self._set_interaction_handler("change", value, custom_interaction=True)
-
-    @property
-    def on_submit (self):
-        """Event handler for submit."""
-        return self._get_interaction_handler("submit")
-
-    @on_submit.setter
-    def on_submit (self, value):
-        self._set_interaction_handler("submit", value, custom_interaction=True)
+        self._set_interaction_handler("change", value)
 
 
     @property
@@ -70,9 +67,4 @@ class TextField (Control):
 
     @on_input.setter
     def on_input (self, value):
-        self._set_interaction_handler("input", value, custom_interaction=True)
-
-    def _on_client_interaction(self, e: InteractionEvent):
-        if e.interaction_name == "input":
-            self.value = e.data["interactionValue"]
-        super()._on_client_interaction(e)
+        self._set_interaction_handler("input", value)

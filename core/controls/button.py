@@ -1,7 +1,7 @@
-from ..models import ElementPropType
+from ...models import ElementPropType
 from .parentcontrol import ParentControl
-from ..models.properties.cursor import Cursor
-from ..models.parentcontroldefaultkwargs import CombinedControlKwargs, Unpack
+from ...models.properties.cursor import Cursor
+from ...models.parentcontroldefaultkwargs import CombinedControlKwargs, Unpack
 
 
 class Button (ParentControl):

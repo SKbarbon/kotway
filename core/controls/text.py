@@ -1,6 +1,6 @@
-from ..models.controldefaultkwargs import ControlDefaultKwargs, Unpack
+from ...models.controldefaultkwargs import ControlDefaultKwargs, Unpack
 from .control import Control, ElementPropType
-from ..custom_collections.sizeunit import SizeUnit
+from ...custom_collections.sizeunit import SizeUnit
 
 class Text (Control):
     def __init__(self, content:str, font_size: SizeUnit | int = None, *args, **kwargs: Unpack[ControlDefaultKwargs]):

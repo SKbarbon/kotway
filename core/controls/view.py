@@ -1,7 +1,7 @@
 from .parentcontrol import ParentControl
 
-from ..models.parentcontroldefaultkwargs import CombinedControlKwargs, Unpack
-from ..models import InteractionEvent
+from ...models.parentcontroldefaultkwargs import CombinedControlKwargs, Unpack
+from ...models import InteractionEvent
 from collections.abc import Callable
 
 class View (ParentControl):

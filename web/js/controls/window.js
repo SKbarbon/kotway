@@ -43,7 +43,7 @@ export class Window extends Control {
     }
 
     _sendWindowSize () {
-        this.onInteractionEvent("resize", {
+        this.onInteractionEvent("resize", "resize", {
             "width": parseFloat(window.innerWidth),
             "height": parseFloat(window.innerHeight)
         });

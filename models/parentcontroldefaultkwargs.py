@@ -1,4 +1,4 @@
-from ..controls.control import Control
+from ..core.controls.control import Control
 from typing import TypedDict, Unpack
 
 from ..models.properties.displaytype import DisplayType

@@ -1,4 +1,4 @@
-from ..controls.control import Control
+from ..core.controls.control import Control
 
 class ControlsList (list):
     def __init__(self, on_append, on_remove, on_clear, *args, **kwargs):

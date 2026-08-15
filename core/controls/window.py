@@ -1,5 +1,5 @@
 from .control import Control, ElementPropType
-from ..models import InteractionEvent
+from ...models import InteractionEvent
 from enum import Enum
 import threading
 
@@ -19,7 +19,7 @@ class Window (Control):
         super()._on_client_interaction(e)
 
         if e.interaction_name == "resize":
-            new_values = e.data["interactionValue"]
+            new_values = e.data["value"]
             self.width = new_values["width"]
             self.height = new_values["height"]
 

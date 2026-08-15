@@ -4,7 +4,7 @@ from .page import Page
 
 from .adapters import *
 
-from .controls import *
+from .core.controls import *
 
 from .models import *
 

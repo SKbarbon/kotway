@@ -1,14 +1,14 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ..page import Page
+    from ...page import Page
 from collections.abc import Callable
 
-from ..models import *
-from ..custom_collections.sizeunit import SizeUnit, UnitType
-from ..custom_collections.color import Color
-from ..models.events.controlevent import *
-from ..models.properties.linestyle import LineStyle
+from ...models import *
+from ...custom_collections.sizeunit import SizeUnit, UnitType
+from ...custom_collections.color import Color
+from ...models.events.controlevent import *
+from ...models.properties.linestyle import LineStyle
 import uuid, threading
 from enum import Enum
 

@@ -1,6 +1,6 @@
 from .parentcontrol import ParentControl, ElementPropType
-from ..models.parentcontroldefaultkwargs import CombinedControlKwargs, Unpack
-from ..models.properties.linktarget import LinkTarget
+from ...models.parentcontroldefaultkwargs import CombinedControlKwargs, Unpack
+from ...models.properties.linktarget import LinkTarget
 
 class Anchor (ParentControl):
     """The HTML `<a>` tag, or anchor element, is used to create hyperlinks that connect web pages, files, email addresses, or specific locations on the same page."""

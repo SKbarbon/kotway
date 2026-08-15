@@ -1,6 +1,6 @@
-from ..models.controldefaultkwargs import ControlDefaultKwargs, Unpack
+from ...models.controldefaultkwargs import ControlDefaultKwargs, Unpack
 from .control import Control
-from ..models import ElementPropType
+from ...models import ElementPropType
 
 class Image (Control):
     def __init__(self, src: str="", alt: str="", *args, **kwargs: Unpack[ControlDefaultKwargs]):

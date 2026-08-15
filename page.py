@@ -2,9 +2,9 @@ from .models import EventCore, EventType, InteractionEvent
 from .utils.find_control_by_uuid import find_control_by_uuid
 from .models.events.pageevent import *
 from .models.events.client_events.clientpageevent import *
-from .controls.window import Window
+from .core.controls.window import Window
 from .custom_collections.viewslist import ViewsList
-from .controls import Control, View
+from .core.controls import Control, View
 
 from collections.abc import Callable
 import threading

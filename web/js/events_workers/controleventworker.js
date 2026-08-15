@@ -14,7 +14,8 @@ export class ControlEventWorker {
             this.addChildToParentControl(ev.data);
         }
         else if (ev.event_name == "remove_child") {
-            this.selectedControl.removeControl(ev.data.control_uuid);
+            const control = page.getControlByUuid(ev.data.control_uuid);
+            this.selectedControl.removeControl(control);
         }
         else if (ev.event_name == "execute_trigger") {
             const evData = ev.data;
