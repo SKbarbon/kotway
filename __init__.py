@@ -5,6 +5,7 @@ from .page import Page
 from .adapters import *
 
 from .core.controls import *
+from .core.head import *
 
 from .models import *
 

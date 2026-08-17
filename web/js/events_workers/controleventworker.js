@@ -1,4 +1,4 @@
-import { CONTROLS_FACTORY } from "../controls/controls_factory.js";
+import { CONTROLS_FACTORY } from "../core/controls/controls_factory.js";
 
 
 export class ControlEventWorker {

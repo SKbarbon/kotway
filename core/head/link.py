@@ -2,20 +2,25 @@ from .headelement import HeadElement
 
 class Link (HeadElement):
     """The HTML `<link>` tag placed inside the `<head>` element 
-    establishes a connection between the HTML document and an external resource."""
-    def __init__(self, ref: str, href: str):
+    establishes a connection between the HTML document and an external resource.
+    
+    ARGS:
+        `rel` (string): relationship attribute defines how the linked resource connects to the current document.
+        `href` (string): hypertext reference attribute specifies the path or URL to that resource.
+    """
+    def __init__(self, rel: str, href: str):
         super().__init__()
-        self.ref: str = ref
+        self.rel: str = rel
         self.href: str = href
 
 
     @property
-    def ref (self):
-        return self._get_prop("ref")
+    def rel (self):
+        return self._get_prop("rel")
 
-    @ref.setter
-    def ref (self, value: str):
-        self._set_prop("ref", value)
+    @rel.setter
+    def rel (self, value: str):
+        self._set_prop("rel", value)
 
     @property
     def href (self):

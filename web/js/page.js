@@ -1,12 +1,15 @@
 import {ClientEvent, ClientEventType} from "./models/clientevent.js";
 import { findControlByUuid } from "./utils/findcontrolbyuuid.js";
 import { FatalErrorMessageView } from "./custom_views/fatalerrormessageview.js";
-import { Window } from "./controls/window.js";
+import { Window } from "./core/controls/window.js";
+import { Head } from "./core/head/head.js";
 import { ClientPageEvent, ClientPageEventName, ClientPageEventUnhandeldRoute } from "./models/clientpageevent.js";
 
 export class Page {
     constructor (adapterTransport) {
         this.adapterTransport = adapterTransport;
+
+        this.head = new Head();
         this.window = new Window(this);
         
         this.views = [];

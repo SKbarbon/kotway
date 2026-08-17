@@ -1,5 +1,5 @@
-import { View } from "../controls/view.js";
-import {Text} from "../controls/text.js";
+import { View } from "../core/controls/view.js";
+import {Text} from "../core/controls/text.js";
 
 export class FatalErrorMessageView extends View {
     constructor (errorMessage) {

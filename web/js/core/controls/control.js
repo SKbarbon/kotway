@@ -1,5 +1,5 @@
-import { InteractionEvent } from "../models/interactionevent.js";
-import {ClientEventType} from "../models/clientevent.js";
+import { InteractionEvent } from "../../models/interactionevent.js";
+import {ClientEventType} from "../../models/clientevent.js";
 
 export class Control {
     constructor () {

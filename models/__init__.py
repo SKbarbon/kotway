@@ -1,5 +1,6 @@
 
 from .events.eventcore import EventType, EventCore
+from .events.pageevent import *
 
 from .properties.elementproptype import ElementPropType
 from .properties.displaytype import DisplayType

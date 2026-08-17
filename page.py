@@ -1,12 +1,16 @@
 from .models import EventCore, EventType, InteractionEvent
-from .utils.find_control_by_uuid import find_control_by_uuid
 from .models.events.pageevent import *
 from .models.events.client_events.clientpageevent import *
+
 from .core.controls.window import Window
-from .custom_collections.viewslist import ViewsList
 from .core.controls import Control, View
+from .core.head.head import Head
+
+from .custom_collections.viewslist import ViewsList
 
 from collections.abc import Callable
+
+from .utils.find_control_by_uuid import find_control_by_uuid
 import threading
 
 class Page:
@@ -17,6 +21,7 @@ A Page is a session and views container.
         self.__session_id: str = session_id
         self.__next_events: list[EventCore] = []
 
+        self.head = Head(page=self)
         self.window = Window(page=self)
 
         self.views: list[View] = ViewsList(

@@ -1,4 +1,4 @@
-import {ClientEventType} from "../models/clientevent.js";
+import {ClientEventType} from "../../models/clientevent.js";
 import { Control } from "./control.js";
 
 export class Window extends Control {

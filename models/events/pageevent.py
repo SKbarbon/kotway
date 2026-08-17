@@ -5,6 +5,7 @@ class PageEventName (Enum):
     ADD_VIEW = "add_view"
     PRESENT_VIEW = "present_view"
     REMOVE_VIEW = "remove_view"
+    HEAD_EVENT = "head_event"
 
 class PageEvent (BaseModel):
     event_name: PageEventName

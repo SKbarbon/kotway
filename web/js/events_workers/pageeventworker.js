@@ -1,4 +1,5 @@
-import { View } from "../controls/view.js";
+import { View } from "../core/controls/view.js";
+import { HeadEventWorker } from "./headeventworker.js";
 
 export class PageEventWorker {
     constructor (page, pageEvent) {
@@ -16,6 +17,12 @@ export class PageEventWorker {
         else if (pageEvent.event_name == "remove_view") {
             const viewUuid = pageEvent.data.view_uuid;
             this.page.removeView(viewUuid);
+        }
+        else if (pageEvent.event_name == "head_event") {
+            new HeadEventWorker(
+                page,
+                pageEvent.data
+            );
         }
     }
 
