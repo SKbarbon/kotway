@@ -2,6 +2,7 @@ from .adapters import AppAdapter, FlaskAdapter
 from .page import Page
 import uuid, threading
 
+from .utils.execute_target import execute_target
 from .utils.get_webapp_path import get_webapp_path
 
 class App ():
@@ -40,7 +41,7 @@ class App ():
             self.target(new_page)
             new_page._client_changed_route(requested_route)
 
-        threading.Thread(target=run_target, daemon=True).start()
+        execute_target(target=run_target)
 
         self.active_pages[new_page.session_id] = new_page
         return new_page
@@ -48,7 +49,7 @@ class App ():
     def remove_page_session (self, session_id: str):
         if session_id in self.active_pages:
             page = self.active_pages[session_id]
-            threading.Thread(target=page.on_session_end, daemon=True).start()
+            execute_target(target=page.on_session_end)
             del self.active_pages[session_id]
 
     def get_page_by_sessionid (self, session_id):

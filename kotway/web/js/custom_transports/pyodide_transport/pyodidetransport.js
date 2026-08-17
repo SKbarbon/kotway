@@ -10,12 +10,14 @@ export class PyodideTransport extends AdapterTransport {
         super();
         this.pythonWorker = new Worker(new URL('./python-worker.js', import.meta.url));
         this.pythonWorker.onmessage = (event) => {this._handlerPythonWorkerMessage(event.data);}
-        
-        this.pythonWorker.postMessage("start")
     }
 
     listenToEvents() {
+        this.pythonWorker.postMessage("start")
+    }
 
+    sendClientEvent (event) {
+        this.pythonWorker.postMessage(event);
     }
 
     /**
@@ -23,6 +25,17 @@ export class PyodideTransport extends AdapterTransport {
      * @param {string} message 
      */
     _handlerPythonWorkerMessage (message) {
-        console.log("Transport got a message: " + message)
+        try {
+            const event = JSON.parse(message);
+            // If provided sessionId, store it.
+            if ("sessionId" in event) {
+                sessionStorage.setItem('sessionId', event.sessionId);
+            }
+            this.onHostEvent(event);
+        } catch (err) {
+            console.error("Failed to parse chunk line:", err);
+            console.log("Error on value: " + message);
+            this.onFatalError(err);
+        }
     }
 }

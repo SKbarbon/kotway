@@ -24,6 +24,10 @@ export class AdapterTransport {
         eventExecutor(event, this.page);
     }
 
+    /**
+     * Send an event from this client to the Python app.
+     * @param {*} event 
+     */
     sendClientEvent (event) {
 
     }

@@ -27,7 +27,7 @@ AppAdapter allows the app to interact with events though API. For example, the d
     def on_client_event (self, e: ClientEvent):
         """Handle events sent by the client."""
         try: self.__on_client_event(e)
-        except:
+        except Exception:
             if self.debug:
                 traceback.print_exc()
                 self.on_client_session_end(e.sessionId)

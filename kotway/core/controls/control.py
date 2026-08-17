@@ -9,6 +9,8 @@ from ...custom_collections.sizeunit import SizeUnit, UnitType
 from ...custom_collections.color import Color
 from ...models.events.controlevent import *
 from ...models.properties.linestyle import LineStyle
+from ...utils.execute_target import execute_target
+
 import uuid, threading
 from enum import Enum
 
@@ -152,8 +154,7 @@ class Control:
         e.control = self
         iname = e.interaction_name
         if iname in self.interaction_handlers and self.interaction_handlers[iname] != None:
-            threading.Thread(target=self.interaction_handlers[iname],
-                             daemon=True, args=[e]).start()
+            execute_target(target=self.interaction_handlers[iname], args=[e])
 
     # == Default props ==
 

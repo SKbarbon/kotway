@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.jsdelivr.net/pyodide/v314.0.5/full/pyodide.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>kotway</title>
@@ -36,7 +35,7 @@ html, body {
 }
 </style>
 
-<!-- <script type="module">
+<script type="module">
 import {KotwayApp} from "./js/kotway.js";
 import {FlaskAdaptorTransport} from "./js/custom_transports/flaskadaptortransport.js";
 
@@ -44,9 +43,9 @@ const adapterTransport = new FlaskAdaptorTransport();
 const kotwayApp = new KotwayApp(adapterTransport);
 
 kotwayApp.run();
-</script> -->
+</script>
 
-<script type="module">
+<!-- <script type="module">
 // Tests for pyodide support
 import {KotwayApp} from "./js/kotway.js";
 import {  PyodideTransport  } from "./js/custom_transports/pyodide_transport/pyodidetransport.js";
@@ -55,4 +54,4 @@ const adapterTransport = new PyodideTransport();
 const kotwayApp = new KotwayApp(adapterTransport);
 
 kotwayApp.run();
-</script>
+</script> -->

@@ -10,6 +10,7 @@ from .custom_collections.viewslist import ViewsList
 
 from collections.abc import Callable
 
+from .utils.execute_target import execute_target
 from .utils.find_control_by_uuid import find_control_by_uuid
 import threading
 
@@ -31,15 +32,16 @@ A Page is a session and views container.
 
         self.__current_route: str = "/"
 
-        self.update()
-        self.present_view("/")
-
         # Events
+        self.__adapter_hook_on_add_event = None
         self.on_unhandled_route_change: Callable[[str], None] = None
         """When the client goes to a route that has no view."""
 
         self.on_session_end: Callable[[], None] = None
         """When the client is already out and disconnected."""
+
+        self.update()
+        self.present_view("/")
 
     # utils
     def update (self):
@@ -109,6 +111,9 @@ A Page is a session and views container.
         if type(event) != EventCore:
             raise TypeError(f"Event must be an EventCore not '{type(event)}'.")
         self.__next_events.append(event)
+
+        if self.__adapter_hook_on_add_event != None:
+            self.__adapter_hook_on_add_event(event)
 
     def add_page_event (self, event_name: PageEventName, data: dict):
         page_event = PageEvent(
@@ -181,8 +186,19 @@ A Page is a session and views container.
 
     def __run_event_handler (self, func, *args):
         if func == None: return
-        threading.Thread(target=func, args=args, daemon=True).start()
+        execute_target(target=func, args=args)
+    
     # Props
+    @property
+    def adapter_hook_on_add_event (self):
+        """Used by adapters to hook into the add_event function."""
+        return
+
+    @adapter_hook_on_add_event.setter
+    def adapter_hook_on_add_event (self, hooker):
+        if self.__adapter_hook_on_add_event != None:
+            raise Exception("This property is locked.")
+        self.__adapter_hook_on_add_event = hooker
 
     @property
     def current_view (self) -> View:

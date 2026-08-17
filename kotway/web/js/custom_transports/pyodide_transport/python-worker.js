@@ -18,6 +18,7 @@ await micropip.install(packages)
 self.initPyodide = async function () {
     const pyodide = await loadPyodide();
     var appPath = self.location.origin + "/app.zip"
+    await pyodide.loadPackage("micropip");
     await pyodide.runPythonAsync(`
 import sys, runpy, traceback
 from pyodide.http import pyfetch
