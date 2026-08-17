@@ -23,9 +23,6 @@ AppAdapter allows the app to interact with events though API. For example, the d
     def create_session (self, requested_route: str) -> str:
         return self.app_class.start_new_page_session(requested_route=requested_route).session_id
 
-    def send_host_event (self, e: EventCore):
-        pass
-
 
     def on_client_event (self, e: ClientEvent):
         """Handle events sent by the client."""
