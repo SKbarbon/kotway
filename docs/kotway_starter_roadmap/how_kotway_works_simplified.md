@@ -30,4 +30,4 @@ So if the client was a person, and he got the earlier App message, he will respo
 CLIENT 👷: "Alright I got the message. Here is the text. And oh, it is green. Just the way you wanted 😉."
 
 ## That's it 😎!
-Wow look at you. You know understand correctly how `kotway` works under the hood!
+Wow look at you. You now understand correctly how `kotway` works under the hood!
