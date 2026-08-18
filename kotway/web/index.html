@@ -6,8 +6,9 @@
     <title>kotway</title>
 </head>
 <script>
-const sessionId = null; // Replaced by Python.
+const sessionId = null; // Replaced by Python adapter or js transport.
 sessionStorage.setItem('sessionId', sessionId);
+//<--isPyodide-->
 </script>
 
 <body>
@@ -37,21 +38,21 @@ html, body {
 
 <script type="module">
 import {KotwayApp} from "./js/kotway.js";
-import {FlaskAdaptorTransport} from "./js/custom_transports/flaskadaptortransport.js";
 
-const adapterTransport = new FlaskAdaptorTransport();
+const isPyodide = sessionStorage.getItem("isPyodide")
+console.log("Is pyodide: "+isPyodide);
+var adapterTransport;
+
+if (isPyodide == "true") {
+  adapterTransport = await import("./js/custom_transports/pyodide_transport/pyodidetransport.js");
+  adapterTransport = new adapterTransport.PyodideTransport();
+} else {
+  adapterTransport = await import("./js/custom_transports/flaskadaptortransport.js");
+  adapterTransport = new adapterTransport.FlaskAdaptorTransport();
+}
+
+console.log(adapterTransport);
 const kotwayApp = new KotwayApp(adapterTransport);
 
 kotwayApp.run();
 </script>
-
-<!-- <script type="module">
-// Tests for pyodide support
-import {KotwayApp} from "./js/kotway.js";
-import {  PyodideTransport  } from "./js/custom_transports/pyodide_transport/pyodidetransport.js";
-
-const adapterTransport = new PyodideTransport();
-const kotwayApp = new KotwayApp(adapterTransport);
-
-kotwayApp.run();
-</script> -->

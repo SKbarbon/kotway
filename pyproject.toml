@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kotway"
+version = "0.1.0"
+description = "Build web apps in Python."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+    { name = "SKbarbon", email = "no@suchthing.com" },
+]
+dependencies = [
+    "flask",
+    "flask_cors",
+    "pydantic"
+]
+
+[project.urls]
+Homepage = "https://github.com/SKbarbon/kotway"
+Repository = "https://github.com/SKbarbon/kotway"
+Issues = "https://github.com/SKbarbon/kotway/issues"

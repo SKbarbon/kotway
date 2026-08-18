@@ -59,6 +59,10 @@ export class Control {
     }
 
     onInteractionEvent (interactionName, eventName, eventValue) {
+        if (this.uuid == null) {
+            console.warn("Skipped interaction event " + interactionName + ". No uuid.")
+            return;
+        }
         this.page.announceClientEvent(
             ClientEventType.INTERACTION,
             new InteractionEvent({
