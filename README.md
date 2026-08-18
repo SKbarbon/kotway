@@ -51,7 +51,7 @@ pip install kotway
 ```
 
 ## Docs 🦆
-I love ducks 🦆, but let's about docs.
+I love ducks 🦆, but let's talk about docs.
 
 I'm trying my best to cover everything. Until we have a real docs page, all documentation will be here: [CLICK ME, LES GO🐎!](https://github.com/SKbarbon/kotway/tree/main/docs)
 
