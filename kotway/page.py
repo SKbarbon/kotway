@@ -42,6 +42,8 @@ A Page is a session and views container.
 
         self.update()
         self.present_view("/")
+        
+        self.head.title.update()
 
     # utils
     def update (self):

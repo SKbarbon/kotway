@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kotway</title>
+    <!-- Title can be modified using kotway tools. -->
+    <title id="mainTitle">Loading..</title>
 </head>
 <script>
 const sessionId = null; // Replaced by Python adapter or js transport.
@@ -12,6 +13,7 @@ sessionStorage.setItem('sessionId', sessionId);
 </script>
 
 <body>
+    <div></div>
     <div  id="VIEWS_CONTAINER"></div>
 </body>
 
@@ -40,18 +42,18 @@ html, body {
 import {KotwayApp} from "./js/kotway.js";
 
 const isPyodide = sessionStorage.getItem("isPyodide")
-console.log("Is pyodide: "+isPyodide);
 var adapterTransport;
 
 if (isPyodide == "true") {
+  // Use Pyodide adapter transport.
   adapterTransport = await import("./js/custom_transports/pyodide_transport/pyodidetransport.js");
   adapterTransport = new adapterTransport.PyodideTransport();
 } else {
+  // Use flask adapter transport.
   adapterTransport = await import("./js/custom_transports/flaskadaptortransport.js");
   adapterTransport = new adapterTransport.FlaskAdaptorTransport();
 }
 
-console.log(adapterTransport);
 const kotwayApp = new KotwayApp(adapterTransport);
 
 kotwayApp.run();

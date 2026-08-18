@@ -6,6 +6,7 @@ if TYPE_CHECKING:
 from ...models import EventCore, EventType, PageEvent, PageEventName
 from ...models.events.headevent import *
 from .headelement import HeadElement
+from .title import Title
 
 
 class Head:
@@ -15,6 +16,10 @@ class Head:
     def __init__(self, page: Page):
         self.__page: Page = page
         self.__elements: list[HeadElement] = []
+
+        self.__title: Title = Title("kotway")
+        self.__title.page = page
+        self.__title.uuid = "TITLE"
 
     def add_element (self, element: HeadElement):
         """Add a head element"""
@@ -40,6 +45,11 @@ class Head:
         )
 
 
+    def update_title (self, title: str):
+        """Update the page title."""
+        self.title.content = title
+        self.title.update()
+
     def _add_head_event (self, event_name: HeadEventName, event_data: dict):
         """Cache the head event in the next events for the page."""
         hev = HeadEvent(
@@ -58,3 +68,7 @@ class Head:
     @property
     def page (self) -> Page:
         return self.__page
+
+    @property
+    def title (self) -> Title:
+        return self.__title

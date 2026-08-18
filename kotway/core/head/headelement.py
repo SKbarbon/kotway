@@ -9,7 +9,7 @@ class HeadElement:
     """Core class for head elements."""
     def __init__(self):
         self.page: Page = None
-        self.__uuid = str(uuid.uuid4())
+        self.uuid: str = str(uuid.uuid4())
         self.current_props: dict[str, any] = {}
 
 
@@ -33,7 +33,3 @@ class HeadElement:
 
     def _get_element_name (self):
         return str(type(self).__name__)
-
-    @property
-    def uuid (self):
-        return self.__uuid
