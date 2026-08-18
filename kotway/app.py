@@ -1,6 +1,6 @@
-from .adapters import AppAdapter, FlaskAdapter
+from .adapters import AppAdapter, FlaskAdapter, PyodideAdapter
 from .page import Page
-import uuid, threading
+import uuid, sys
 
 from .utils.execute_target import execute_target
 from .utils.get_webapp_path import get_webapp_path
@@ -12,7 +12,10 @@ class App ():
         self.debug = debug
 
         if custom_adapter == None:
-            self.app_adapter: AppAdapter = FlaskAdapter()
+            if "pyodide" in sys.argv:
+                self.app_adapter: AppAdapter = PyodideAdapter()
+            else:
+                self.app_adapter: AppAdapter = FlaskAdapter()
         else:
             self.app_adapter: AppAdapter = custom_adapter
 

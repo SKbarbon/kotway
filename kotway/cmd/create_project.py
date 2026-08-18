@@ -54,4 +54,4 @@ kotway.App(main).run()"""
     print(f"Project Path: {project_path}")
     print("To quick run the project, do:")
     print(f"`cd {project_path}`")
-    print("`python -m kotway.run`")
+    print("`python -m kotway run`")
