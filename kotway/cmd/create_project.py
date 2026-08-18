@@ -34,7 +34,8 @@ def create_project (command_args: list[str]):
 
     REQUIREMENTS = """flask
 flask_cors
-pydantic"""
+pydantic
+"""
     REQUIREMENTS = REQUIREMENTS + get_kotway_pipname() + "\n"
     requirements_file_path = os.path.join(project_path, "requirements.txt")
     open(requirements_file_path, "w+", encoding="utf-8").write(REQUIREMENTS)

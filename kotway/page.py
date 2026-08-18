@@ -43,7 +43,7 @@ A Page is a session and views container.
         self.update()
         self.present_view("/")
         
-        self.head.title.update()
+        self.update_title("kotway")
 
     # utils
     def update (self):
@@ -160,6 +160,7 @@ A Page is a session and views container.
             if v.route == route and v.page != None: return True
         return False
 
+    # == Simple APIs ==
 
     def update_title (self, title: str):
         """Update the page title.
@@ -167,6 +168,13 @@ A Page is a session and views container.
         Modifies the head.title content."""
         self.head.title.content = str(title)
         self.head.title.update()
+
+
+    def add (self, control: Control):
+        """Add a control to the current view.
+        
+        Uses the current_view.add_control."""
+        self.current_view.add_control(control)
 
 
     def _client_changed_route (self, route: str, informative: bool = False):

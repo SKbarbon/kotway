@@ -12,7 +12,7 @@ class App ():
         self.debug = debug
 
         if custom_adapter == None:
-            if "pyodide" in sys.argv:
+            if "pyodide" in sys.modules:
                 self.app_adapter: AppAdapter = PyodideAdapter()
             else:
                 self.app_adapter: AppAdapter = FlaskAdapter()
