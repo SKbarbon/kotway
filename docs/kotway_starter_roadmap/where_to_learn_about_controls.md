@@ -20,6 +20,6 @@ There is a LOT of fun suff you can learn about in `kotway`. And getting specific
 HERE!! LOL
 
 In the docs!
-You can go to [Controls](https://github.com/SKbarbon/kotway/tree/main/docs/controls) and search about any control and get any information you want from it!
+You can go to [APIs and Core](https://github.com/SKbarbon/kotway/tree/main/docs/api) and search about any control and get any information you want from it!
 
 Also, the community is always there, and you part of our little community! If you needed specific information and you couldn't get the docs that explain it, then you SHOULD ask the community, and we will answer.
