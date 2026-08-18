@@ -161,6 +161,14 @@ A Page is a session and views container.
         return False
 
 
+    def update_title (self, title: str):
+        """Update the page title.
+        
+        Modifies the head.title content."""
+        self.head.title.content = str(title)
+        self.head.title.update()
+
+
     def _client_changed_route (self, route: str, informative: bool = False):
         """Fired by the adapter when the client change the route.
         

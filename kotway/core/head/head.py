@@ -44,12 +44,6 @@ class Head:
             ).model_dump()
         )
 
-
-    def update_title (self, title: str):
-        """Update the page title."""
-        self.title.content = title
-        self.title.update()
-
     def _add_head_event (self, event_name: HeadEventName, event_data: dict):
         """Cache the head event in the next events for the page."""
         hev = HeadEvent(
