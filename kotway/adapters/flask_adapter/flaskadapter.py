@@ -73,13 +73,14 @@ class FlaskAdapter (AppAdapter):
 
     def start(self):
         host_url = f"http://localhost:{self.port}"
-        if self.debug == False:
-            # 1. Remove Flask's default log handler
-            self.flask_app.logger.removeHandler(default_handler)
 
-            # 2. Silence the Werkzeug web server logs completely
-            log = logging.getLogger('werkzeug')
-            log.disabled = True
+        if not self.debug:
+            # Set Werkzeug to only output ERROR and CRITICAL logs
+            logging.getLogger('werkzeug').setLevel(logging.ERROR)
+            
+            # Set Flask's app logger to only output ERRORs
+            self.flask_app.logger.setLevel(logging.ERROR)
+            
             print(f"Host is running at: {host_url}")
 
         try:
