@@ -7,7 +7,7 @@ from .utils.get_webapp_path import get_webapp_path
 
 class App ():
     """The manager for kotway app pages."""
-    def __init__(self, target, custom_adapter=None, webapp_path: str=None, debug: bool = True):
+    def __init__(self, target, custom_adapter=None, webapp_path: str=None, debug: bool = False):
         self.target = target
         self.debug = debug
 

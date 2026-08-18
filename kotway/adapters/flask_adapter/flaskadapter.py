@@ -1,8 +1,9 @@
 from ..appadapter import AppAdapter
 from ...models import ClientEvent, EventCore, EventType
 from flask import Flask, send_file, request, Response, url_for
+from flask.logging import default_handler
 from flask_cors import CORS
-import os, json, time
+import os, json, time, logging, webbrowser
 
 from .client_stream_manager import ClientStreamManager
 
@@ -71,6 +72,20 @@ class FlaskAdapter (AppAdapter):
             self.on_client_session_end(session_id)
 
     def start(self):
+        host_url = f"http://localhost:{self.port}"
+        if self.debug == False:
+            # 1. Remove Flask's default log handler
+            self.flask_app.logger.removeHandler(default_handler)
+
+            # 2. Silence the Werkzeug web server logs completely
+            log = logging.getLogger('werkzeug')
+            log.disabled = True
+            print(f"Host is running at: {host_url}")
+
+        try:
+            webbrowser.open(host_url)
+        except:
+            pass
         self.flask_app.run(
             port=self.port,
             debug=False,
