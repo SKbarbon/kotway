@@ -1,5 +1,15 @@
 # Documentation
 
+## Examples
+Check out example apps built with kotway: [examples](https://github.com/SKbarbon/kotway/tree/main/docs/examples)
+
+## API and core
+Check out all about kotway APIs, core, and information about controls..[API and Core](https://github.com/SKbarbon/kotway/tree/main/docs/api)
+
+## `kotway` conecpts
+Check out about the concepts. Like, how to support multiple views in your app..
+[concepts](https://github.com/SKbarbon/kotway/tree/main/docs/concepts)
+
 ## Are you new to kotway 🐥?
 if you're new, and want to learn how to build a kotway app, first *HI*, **I'm KOT**.
 
