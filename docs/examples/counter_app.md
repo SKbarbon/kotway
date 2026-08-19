@@ -1,6 +1,12 @@
 # Counter app.
 Inspired by the default flutter counter app, here is how you can do the exact same in `kotway`:
 
+## Result
+When you run the code, you will get this result:
+<img width="680" height="390" alt="kotway_counter_app_example" src="https://github.com/user-attachments/assets/30f3ef74-8278-467b-8779-a0f5d013b53f" />
+
+
+## Script
 ```python
 
 from kotway import UnitType, Position
