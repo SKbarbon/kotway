@@ -20,7 +20,7 @@ self.initPyodide = async function () {
     var appPath = self.location.origin + "/app.zip"
     await pyodide.loadPackage("micropip");
     await pyodide.runPythonAsync(`
-import sys, runpy, traceback
+import sys, runpy, traceback, os
 from pyodide.http import pyfetch
 
 # Get the app zip file. Extract it.
@@ -35,6 +35,8 @@ ${self.installRequirementsScript}
 
 # Try to run the app.
 try:
+    os.chdir("app")
+    sys.path.insert(0, "app")
     runpy.run_module("app.main", run_name="__main__")
 except Exception as e:
     traceback.print_exception(e)

@@ -17,6 +17,7 @@ def run_project (command_args: list[str]):
         raise Exception(f"The provided path `{selected_path}` is not a folder.")
 
     result = subprocess.run(
-        [sys.executable, os.path.join(selected_path, "main.py")]
+        [sys.executable, "main.py"],
+        cwd=os.path.join(selected_path)
     )
     print(f"Process exited with code: {result.returncode}")
