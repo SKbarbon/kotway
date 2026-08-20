@@ -6,8 +6,13 @@ from .utils.execute_target import execute_target
 from .utils.get_webapp_path import get_webapp_path
 
 class App ():
-    """The manager for kotway app pages."""
-    def __init__(self, target, custom_adapter=None, webapp_path: str=None, debug: bool = False):
+    """The enrtry point and the manager for kotway app pages.
+    """
+    def __init__(self, target, 
+                 custom_adapter = None,
+                 webapp_path: str = None,
+                 assets_path: str = None,
+                 debug: bool = False):
         self.target = target
         self.debug = debug
 
@@ -24,11 +29,18 @@ class App ():
         else:
             self.webapp_path = webapp_path
 
+
+        if assets_path == None:
+            self.assets_path = "assets/"
+        else:
+            self.assets_path = assets_path
+
         self.active_pages: dict[str, Page] = {}
 
     def run (self, port: int = 1544):
         self.app_adapter.port = port
         self.app_adapter.webapp_path = self.webapp_path
+        self.app_adapter.assets_path = self.assets_path
         self.app_adapter.app_class = self
         self.app_adapter.debug = self.debug
         self.app_adapter.start()

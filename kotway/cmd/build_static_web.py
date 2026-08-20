@@ -27,6 +27,7 @@ def build_static_web (command_args: list[str]):
             raise Exception(f"The project folder need to have {os.path.basename(f)}")
 
     # STEP: create dist folder.
+    print("Creating..")
     dist_path = os.path.join(selected_path, "dist")
     if os.path.isdir(dist_path):
         shutil.rmtree(dist_path)
@@ -36,9 +37,14 @@ def build_static_web (command_args: list[str]):
     spec = importlib.util.find_spec("kotway")
     kotway_path = spec.submodule_search_locations[0]
     web_path = os.path.join(kotway_path, "web")
+    project_assets_path = os.path.join(selected_path, "assets")
     index_file_path = os.path.join(web_path, "index.html")
 
     shutil.copytree(web_path, dist_path, dirs_exist_ok=True)
+    # Copy assets to the web app's assets
+    if os.path.isdir(project_assets_path):
+        print(f"Copying project assets at: {project_assets_path}")
+        shutil.copytree(project_assets_path, os.path.join(dist_path, "assets"), dirs_exist_ok=True)
 
     # STEP: Modify index.html
     # The modification tells the index to use pyodide adapter.
@@ -67,3 +73,5 @@ def build_static_web (command_args: list[str]):
     app_zip_path = os.path.join(dist_path, "app")
     shutil.make_archive(app_zip_path, 'zip', temp_app_path)
     shutil.rmtree(temp_app_path)
+    print("The web app is built successfully!")
+    print(f"You can find it in your project under '/dist'")

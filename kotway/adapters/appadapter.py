@@ -10,8 +10,9 @@ AppAdapter allows the app to interact with events though API. For example, the d
     def __init__(self):
         self.__port = None
         self.__webapp_path = None
+        self.assets_path: str = None
         self.app_class = None
-        self.debug: bool = True
+        self.debug: bool = None
 
     def start (self):
         """Start the adapter.

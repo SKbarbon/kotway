@@ -36,17 +36,28 @@ class FlaskAdapter (AppAdapter):
 
 
     def _flask_catch (self, path="/"):
+        # == POST REQUESTS MANAGE ==
         if path == "" and request.method == "POST":
             try: event_data = ClientEvent(**request.get_json())
-            except: return
+            except: return {}
             self.on_client_event(event_data)
             return {}
         elif path == "stream_events" and request.method == "POST":
             session_id = request.get_json()["sessionId"]
             return Response(self.stream_events(session_id), mimetype="text/event-stream")
 
+        # If a web app file was requested.
         if os.path.isfile(os.path.join(self.webapp_path, path)):
             return send_file(os.path.join(self.webapp_path, path))
+
+        # If an asset file was requested.
+        elif path.startswith("assets/"):
+            asset_path = path[len("assets/"):]
+            built_full_path = os.path.join(self.assets_path, asset_path)
+            if os.path.isfile (built_full_path):
+                return send_file(built_full_path)
+            else:
+                return "", 404
 
         session_id = self.create_session(requested_route=request.path)
         return self.__get_index_content(session_id)
