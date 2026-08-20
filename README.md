@@ -16,7 +16,7 @@ kotway.App(main).run()
 ```
 **I lied 🤭. Confetti 🎊!!!**, You made A WEB APP 🤯!
 
-## Capabilities 😼
+## Capabilities
 Cleans your room, watch movies with you, and--
 Wait, opps spoilers 😁.
 

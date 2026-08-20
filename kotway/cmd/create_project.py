@@ -32,6 +32,9 @@ def create_project (command_args: list[str]):
         duplicate_num = duplicate_num + 1
     os.mkdir(project_path)
 
+    # create the assets folder.
+    os.mkdir(os.path.join(project_path, "assets"))
+
     REQUIREMENTS = """flask
 flask_cors
 pydantic
