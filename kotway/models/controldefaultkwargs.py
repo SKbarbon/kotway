@@ -28,3 +28,8 @@ class ControlDefaultKwargs(TypedDict):
     text_align: Alignment
 
     on_click: Callable[[InteractionEvent], None]
+    on_pointer_enter: Callable[[InteractionEvent], None]
+    on_pointer_move: Callable[[InteractionEvent], None]
+    on_mouse_leave: Callable[[InteractionEvent], None]
+    on_pointer_down: Callable[[InteractionEvent], None]
+    on_pointer_up: Callable[[InteractionEvent], None]
