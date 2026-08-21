@@ -19,9 +19,8 @@ class Window (Control):
         super()._on_client_interaction(e)
 
         if e.interaction_name == "resize":
-            new_values = e.data["value"]
-            self.width = new_values["width"]
-            self.height = new_values["height"]
+            self.width = e.data["width"]
+            self.height = e.data["height"]
 
 
     def exchange_window_size (self):
