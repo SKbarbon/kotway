@@ -4,6 +4,7 @@ import { Button } from "./button.js";
 import { Image } from "./image.js";
 import { Container } from "./container.js";
 import { Anchor } from "./anchor.js";
+import { IFrame } from "./iframe.js";
 
 export const CONTROLS_FACTORY = {
 "Text": Text,
@@ -11,5 +12,6 @@ export const CONTROLS_FACTORY = {
 "Button": Button,
 "Image": Image,
 "Container": Container,
-"Anchor": Anchor
+"Anchor": Anchor,
+"IFrame": IFrame
 }
