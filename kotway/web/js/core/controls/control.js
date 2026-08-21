@@ -81,6 +81,11 @@ export class Control {
      */
     executeTrigger (triggerName, data) {
         const triggerFunc = this.triggers[triggerName];
+
+        if (triggerFunc == null) {
+            console.error("No trigger found for name: " + triggerName);
+            return;
+        }
         triggerFunc(data);
     }
 
