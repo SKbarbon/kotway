@@ -1,7 +1,7 @@
 # Drawing app 🎨
-This is a very simple drawing app. You will get something like this at the end:
+This is a very simple drawing app (pool-based ink). You will get something like this at the end where you can draw:
 
-picture
+<img width="891" height="677" alt="image" src="https://github.com/user-attachments/assets/6e547309-a33a-4af0-b8d5-5251b3fcaaa6" />
 
 
 ## Script
