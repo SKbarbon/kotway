@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from enum import Enum
+import numbers
+
 
 class UnitType (Enum):
     """
@@ -37,8 +39,10 @@ class SizeUnit (str):
         return obj
 
     @classmethod
-    def number (self, value: str) -> int:
+    def number (self, value) -> float | int:
         """Gets the raw string value and fetch the number from it."""
+        if isinstance(value, numbers.Number):
+            return value
         for t in UnitType:
             if value.endswith(t.value):
                 return int(value.lower().removesuffix(t.value))

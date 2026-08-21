@@ -29,7 +29,7 @@ class TextField (Control):
 
     def _on_client_interaction(self, e: InteractionEvent):
         if e.interaction_name == "input":
-            self.value = e.data["value"]
+            self.value = e.data["inputValue"]
         super()._on_client_interaction(e)
 
     @property

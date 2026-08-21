@@ -1,5 +1,6 @@
 import { InteractionEvent } from "../../models/interactionevent.js";
 import {ClientEventType} from "../../models/clientevent.js";
+import { eventToJSON } from "../../utils/eventtojson.js";
 
 export class Control {
     constructor () {
@@ -46,7 +47,8 @@ export class Control {
         this.interaEventListenersControllers[interactionName] = controller;
         targetElement.addEventListener(interactionName, (e) => {
             e.preventDefault();
-            this.onInteractionEvent(interactionName, e.key, e.target.value);
+            const eventData = eventToJSON(e);
+            this.onInteractionEvent(interactionName, eventData);
         }, { signal: controller.signal });
     }
 
@@ -58,7 +60,7 @@ export class Control {
         }
     }
 
-    onInteractionEvent (interactionName, eventName, eventValue) {
+    onInteractionEvent (interactionName, eventData) {
         if (this.uuid == null) {
             console.warn("Skipped interaction event " + interactionName + ". No uuid.")
             return;
@@ -68,10 +70,7 @@ export class Control {
             new InteractionEvent({
                 control_uuid: this.uuid,
                 interaction_name: interactionName,
-                data: {
-                    eventName: eventName,
-                    value: eventValue
-                }
+                data: eventData
             })
         );
     }
