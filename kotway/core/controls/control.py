@@ -28,7 +28,9 @@ class Control:
                 font_size: SizeUnit | int = None,
                 text_align: Alignment = None,
 
-                on_click: Callable[[InteractionEvent], None] = None):
+                on_click: Callable[[InteractionEvent], None] = None,
+                on_pointer_enter: Callable[[InteractionEvent], None] = None
+                ):
         self.__unannounced_events: list[EventCore] = [] # Events to be sent on .update()
 
         self.page: Page = None
@@ -65,6 +67,7 @@ class Control:
         self.text_align = text_align
 
         self.on_click = on_click
+        self.on_pointer_enter = on_pointer_enter
     
     def update (self):
         """Push an update event for the control's props."""
@@ -367,8 +370,57 @@ class Control:
     # EVENT HANDLERS
     @property
     def on_click (self):
+        """Fired when the control is clicked."""
         return self._get_interaction_handler("click")
 
     @on_click.setter
-    def on_click (self, value):
+    def on_click (self, value: Callable[[InteractionEvent], None]):
         self._set_interaction_handler("click", value)
+
+    @property
+    def on_pointer_enter (self):
+        """Fired when the pointer enters the control area."""
+        return self._get_interaction_handler("pointerenter")
+
+    @on_pointer_enter.setter
+    def on_pointer_enter (self, value: Callable[[InteractionEvent], None]):
+        self._set_interaction_handler("pointerenter", value)
+
+    @property
+    def on_pointer_move (self):
+        """Fired when the pointer moves inside the control's area."""
+        return self._get_interaction_handler("pointermove")
+
+    @on_pointer_move.setter
+    def on_pointer_move (self, value):
+        self._set_interaction_handler("pointermove", value)
+
+    @property
+    def on_mouse_leave (self):
+        """Fired when the pointer leaves the control area."""
+        return self._get_interaction_handler("mouseleave")
+
+    @on_mouse_leave.setter
+    def on_mouse_leave (self, value):
+        self._set_interaction_handler("mouseleave", value)
+
+
+    @property
+    def on_pointer_down (self):
+        """User presses down on the element.
+        
+        The exact instant a mouse button is pressed or a touch begins."""
+        return self._get_interaction_handler("pointerdown")
+
+    @on_pointer_down.setter
+    def on_pointer_down (self, value):
+        self._set_interaction_handler("pointerdown", value)
+
+    @property
+    def on_pointer_up (self):
+        """User releases the press/touch while still hovering over the element."""
+        return self._get_interaction_handler("pointerup")
+
+    @on_pointer_up.setter
+    def on_pointer_up (self, value):
+        self._set_interaction_handler("pointerup", value)
