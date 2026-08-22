@@ -26,6 +26,7 @@ class ControlDefaultKwargs(TypedDict):
     left: SizeUnit | int
     outline_style: LineStyle
     text_align: Alignment
+    font_weight: FontWeight | int
 
     on_click: Callable[[InteractionEvent], None]
     on_pointer_enter: Callable[[InteractionEvent], None]
