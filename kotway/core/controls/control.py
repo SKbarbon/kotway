@@ -27,6 +27,9 @@ class Control:
                 outline_style: LineStyle = None,
                 font_size: SizeUnit | int = None,
                 text_align: Alignment = None,
+                font_weight: FontWeight | int = None,
+                elem_class: str = None,
+                visibility: Visibility | str = None,
 
                 on_click: Callable[[InteractionEvent], None] = None,
                 on_pointer_enter: Callable[[InteractionEvent], None] = None
@@ -65,6 +68,9 @@ class Control:
         self.outline_style = outline_style
         self.font_size = font_size
         self.text_align = text_align
+        self.font_weight = font_weight
+        self.elem_class = elem_class
+        self.visibility = visibility
 
         self.on_click = on_click
         self.on_pointer_enter = on_pointer_enter
@@ -366,6 +372,35 @@ class Control:
     @text_align.setter
     def text_align (self, value: Alignment):
         self._set_prop_value(ElementPropType.STYLE, "text-align", value)
+
+
+    @property
+    def font_weight (self):
+        return self._get_prop_value(ElementPropType.STYLE, "font-weight")
+
+    @font_weight.setter
+    def font_weight (self, value: FontWeight | int):
+        self._set_prop_value(ElementPropType.STYLE, "font-weight", value)
+
+
+    @property
+    def elem_class (self) -> str:
+        """The html element's class property."""
+        return self._get_prop_value(ElementPropType.PROP, "className")
+
+    @elem_class.setter
+    def elem_class (self, value: str):
+        self._set_prop_value(ElementPropType.PROP, "className", value)
+
+
+    @property
+    def visibility (self):
+        """Controls whether the `control` is visible or hidden."""
+        return self._get_prop_value(ElementPropType.STYLE, "visibility")
+
+    @visibility.setter
+    def visibility (self, value: Visibility | str):
+        self._set_prop_value(ElementPropType.STYLE, "visibility", value)
 
     # EVENT HANDLERS
     @property

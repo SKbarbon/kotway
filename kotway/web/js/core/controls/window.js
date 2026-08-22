@@ -10,19 +10,14 @@ export class Window extends Control {
 
         this.realtime_size_event_active = false;
 
-        const observer = new ResizeObserver((entries) => {
-            for (const entry of entries) {
-                // Gives exact content area dimensions post-layout
-                const { width, height } = entry.contentRect;
-                
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        if (this.realtime_size_event_active == true) {
-                            this._sendWindowSize();
-                        }
-                    });
-                });
-            }
+        let resizeTimeout;
+        const observer = new ResizeObserver(() => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (this.realtime_size_event_active) {
+                    this._sendWindowSize();
+                }
+            }, 250);
         });
 
         // Observe the root HTML element

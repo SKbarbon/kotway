@@ -34,7 +34,12 @@ For example, executing `TextField.blur()` on the app sends a trigger command to 
 
 So, in other words it can be: A trigger is a method built on the client side to perform something on its control, and can be called from the app.
 
-## Updating properties
+## Properties
+### Default properties
+Those are the properties that exist by default on all controls.
+#### `visibility: Visibility | str`
+Controls whether the control is visible or hidden.
+
 ### Updating a property
 When updating a property, you need to call the controls `.update()` method to push the changes.
 
