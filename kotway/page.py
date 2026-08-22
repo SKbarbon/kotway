@@ -34,6 +34,9 @@ A Page is a session and views container.
 
         # Events
         self.__adapter_hook_on_add_event = None
+        self.on_route_changed: Callable[[str], None] = None
+        """Fired when the client change to any route."""
+
         self.on_unhandled_route_change: Callable[[str], None] = None
         """When the client goes to a route that has no view."""
 
@@ -181,6 +184,7 @@ A Page is a session and views container.
         """Fired by the adapter when the client change the route.
         
         if informative, the page.current_route will be updated only with no more actions."""
+        self.__run_event_handler(self.on_route_changed, route)
         if informative:
             self.__current_route = route
             return
