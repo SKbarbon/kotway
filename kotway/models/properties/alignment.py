@@ -7,3 +7,4 @@ class Alignment (Enum):
     END = "end"
 
     JUSTIFY = "justify"
+    SPACE_BETWEEN = "space-between"
