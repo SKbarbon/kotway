@@ -29,6 +29,7 @@ class Control:
                 text_align: Alignment = None,
                 font_weight: FontWeight | int = None,
                 elem_class: str = None,
+                visibility: Visibility | str = None,
 
                 on_click: Callable[[InteractionEvent], None] = None,
                 on_pointer_enter: Callable[[InteractionEvent], None] = None
@@ -69,6 +70,7 @@ class Control:
         self.text_align = text_align
         self.font_weight = font_weight
         self.elem_class = elem_class
+        self.visibility = visibility
 
         self.on_click = on_click
         self.on_pointer_enter = on_pointer_enter
@@ -389,6 +391,16 @@ class Control:
     @elem_class.setter
     def elem_class (self, value: str):
         self._set_prop_value(ElementPropType.PROP, "className", value)
+
+
+    @property
+    def visibility (self):
+        """Controls whether the `control` is visible or hidden."""
+        return self._get_prop_value(ElementPropType.STYLE, "visibility")
+
+    @visibility.setter
+    def visibility (self, value: Visibility | str):
+        self._set_prop_value(ElementPropType.STYLE, "visibility", value)
 
     # EVENT HANDLERS
     @property
