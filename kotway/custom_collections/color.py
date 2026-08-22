@@ -15,3 +15,7 @@ class Color:
     @classmethod
     def none (self):
         return "none"
+
+    @classmethod
+    def transparent (self):
+        return "transparent"
