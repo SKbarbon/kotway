@@ -98,7 +98,7 @@ class ParentControl (Control):
     @property
     def display (self) -> DisplayType:
         """style.display prop."""
-        self._get_prop_value(ElementPropType.STYLE, prop_name="display")
+        return self._get_prop_value(ElementPropType.STYLE, prop_name="display")
 
     @display.setter
     def display (self, value: DisplayType):
@@ -117,7 +117,7 @@ class ParentControl (Control):
         """Set the flex direction of the View.
         
         You need to set .display to DisplayType.FLEX to work."""
-        self._get_prop_value(ElementPropType.STYLE, prop_name="flex-direction")
+        return self._get_prop_value(ElementPropType.STYLE, prop_name="flex-direction")
 
     @flex_direction.setter
     def flex_direction (self, value: FlexDirection):
@@ -138,7 +138,7 @@ class ParentControl (Control):
 
     @justify_content.setter
     def justify_content (self, value: Alignment):
-        return self._set_prop_value(ElementPropType.STYLE, "justify-content", value)
+        self._set_prop_value(ElementPropType.STYLE, "justify-content", value)
 
     @property
     def align_items (self) -> str:
