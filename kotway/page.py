@@ -105,6 +105,7 @@ A Page is a session and views container.
         raise Exception(f"{traceback}\n\n{exc}")
 
     def get_route_view (self, route: str):
+        """Search and get the first found `View` that represents the provided route."""
         for v in self.views:
             if (v.route == route):
                 return v
@@ -137,6 +138,7 @@ A Page is a session and views container.
         self.add_event(event)
 
     def present_view (self, view_route: str | View):
+        """Route the client to the view."""
         if isinstance(view_route, View):
             view_route = view_route.route
         self.get_route_view(view_route)
@@ -156,6 +158,7 @@ A Page is a session and views container.
             self.__run_event_handler(self.on_unhandled_route_change, data.route)
 
     def get_control_by_uuid (self, uuid:str):
+        """Get the first found control with requested UUID."""
         if uuid == self.window.uuid: return self.window
         if uuid == self.overlays.uuid: return self.overlays
         found_control = None
@@ -184,7 +187,7 @@ A Page is a session and views container.
         self.head.title.update()
 
 
-    def add (self, control: Control):
+    def add (self, control: Control | OverlayControl):
         """Add a control to the current view or to the overlays.
         
         Uses the current_view.add_control."""
