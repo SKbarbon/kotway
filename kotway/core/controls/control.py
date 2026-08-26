@@ -30,6 +30,7 @@ class Control:
                 font_weight: FontWeight | int = None,
                 elem_class: str = None,
                 visibility: Visibility | str = None,
+                z_index: int = None,
 
                 on_click: Callable[[InteractionEvent], None] = None,
                 on_pointer_enter: Callable[[InteractionEvent], None] = None
@@ -71,6 +72,7 @@ class Control:
         self.font_weight = font_weight
         self.elem_class = elem_class
         self.visibility = visibility
+        self.z_index = z_index
 
         self.on_click = on_click
         self.on_pointer_enter = on_pointer_enter
@@ -405,6 +407,15 @@ class Control:
     @visibility.setter
     def visibility (self, value: Visibility | str):
         self._set_prop_value(ElementPropType.STYLE, "visibility", value)
+
+
+    @property
+    def z_index (self):
+        return self._get_prop_value(ElementPropType.STYLE, "z-index")
+
+    @z_index.setter
+    def z_index (self, value: int):
+        self._set_prop_value(ElementPropType.STYLE, "z-index", value)
 
     # EVENT HANDLERS
     @property
