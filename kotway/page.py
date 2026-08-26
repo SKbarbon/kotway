@@ -12,7 +12,6 @@ from collections.abc import Callable
 
 from .utils.execute_target import execute_target
 from .utils.find_control_by_uuid import find_control_by_uuid
-import threading
 
 class Page:
     """
@@ -41,7 +40,10 @@ A Page is a session and views container.
         """When the client goes to a route that has no view."""
 
         self.on_session_end: Callable[[], None] = None
-        """When the client is already out and disconnected."""
+        """When the client is already out and fully disconnected."""
+
+        self.on_disconnect: Callable[[Page], None] = None
+        """When the client is temporarily disconnected."""
 
         self.update()
         self.present_view("/")
@@ -194,6 +196,11 @@ A Page is a session and views container.
             self.present_view(route)
         else:
             self.__run_event_handler(self.on_unhandled_route_change, route)
+
+
+    def _handle_client_disconnect (self):
+        """Fired by the adapter when the client did temporarily disconnect"""
+        self.__run_event_handler(self.on_disconnect, self)
 
     def __remove_view (self, view: View):
         view.page = None

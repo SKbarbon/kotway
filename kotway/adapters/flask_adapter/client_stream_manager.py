@@ -9,6 +9,7 @@ class ClientStreamManager:
 
         self.last_ping = time.time()
         self.keep_alive = True
+        self.disconnected: bool = False
 
         self.ping_request_sent = False
         self.should_ask_for_ping = False
@@ -17,12 +18,13 @@ class ClientStreamManager:
         """The client ponged the ping"""
         self.ping_request_sent = False
         self.should_ask_for_ping = False
+        self.disconnected = False
         self.last_ping = time.time()
 
     def update (self):
         """Called in the loop"""
         if time.time() - self.last_ping > self.pong_resp_limit:
-            self.keep_alive = False
+            self.disconnected = True
 
         elif time.time() - float(self.last_ping) > self.pong_resp_limit / 2:
             self.should_ask_for_ping = True
