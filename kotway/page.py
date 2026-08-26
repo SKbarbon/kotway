@@ -47,6 +47,9 @@ A Page is a session and views container.
         self.on_disconnect: Callable[[Page], None] = None
         """When the client is temporarily disconnected."""
 
+        self.on_reconnect: Callable[[Page], None] = None
+        """When the client connects after being identified as disconnected."""
+
         self.update()
         self.present_view("/")
         
@@ -210,6 +213,10 @@ A Page is a session and views container.
     def _handle_client_disconnect (self):
         """Fired by the adapter when the client did temporarily disconnect"""
         self.__run_event_handler(self.on_disconnect, self)
+
+    def _handle_client_reconnect (self):
+        """Fired by the adapter when the client reconnects after disconnection."""
+        self.__run_event_handler(self.on_reconnect, self)
 
     def __remove_view (self, view: View):
         view.page = None

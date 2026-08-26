@@ -15,6 +15,7 @@ class ClientStreamManager:
         self.should_ask_for_ping = False
 
         self.on_disconnect = None
+        self.on_reconnect = None
         
 
     def pong (self):
@@ -42,4 +43,7 @@ class ClientStreamManager:
         if value == self.__disconnected: return
 
         if value == True and self.on_disconnect != None: self.on_disconnect()
+        if value == False and self.__disconnected == True:
+            if self.on_reconnect != None:
+                self.on_reconnect()
         self.__disconnected = value

@@ -69,6 +69,11 @@ AppAdapter allows the app to interact with events though API. For example, the d
         page: Page = self.app_class.get_page_by_sessionid(session_id)
         page._handle_client_disconnect()
 
+
+    def on_client_session_reconnect (self, session_id: str):
+        page: Page = self.app_class.get_page_by_sessionid(session_id)
+        page._handle_client_reconnect()
+
     # Props
     @property
     def port (self):
