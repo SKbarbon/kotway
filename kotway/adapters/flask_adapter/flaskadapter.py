@@ -64,6 +64,7 @@ class FlaskAdapter (AppAdapter):
 
     def stream_events (self, session_id: str):
         stream_manager = ClientStreamManager(session_id)
+        stream_manager.on_disconnect = lambda: self.on_client_session_disconnect(session_id)
         self.clients_streams_managers[session_id] = stream_manager
 
         try:

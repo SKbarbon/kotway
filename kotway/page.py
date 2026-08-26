@@ -2,6 +2,7 @@ from .models import EventCore, EventType, InteractionEvent
 from .models.events.pageevent import *
 from .models.events.client_events.clientpageevent import *
 
+from .core.controls.overlays.overlaysmanager import OverlaysManager, OverlayControl
 from .core.controls.window import Window
 from .core.controls import Control, View
 from .core.head.head import Head
@@ -23,6 +24,7 @@ A Page is a session and views container.
 
         self.head = Head(page=self)
         self.window = Window(page=self)
+        self.overlays = OverlaysManager(page=self)
 
         self.views: list[View] = ViewsList(
             on_remove=self.__remove_view
@@ -151,12 +153,16 @@ A Page is a session and views container.
             self.__run_event_handler(self.on_unhandled_route_change, data.route)
 
     def get_control_by_uuid (self, uuid:str):
-        if uuid == "WINDOW": return self.window
+        if uuid == self.window.uuid: return self.window
+        if uuid == self.overlays.uuid: return self.overlays
         found_control = None
         for v in self.views:
             if v.uuid == uuid: return v
             found_control = find_control_by_uuid(uuid=uuid, controls=v.controls)
             if found_control is not None: break
+
+        for c in self.overlays.controls:
+            if c.uuid == uuid: return c
         return found_control
 
     def is_route_exist (self, route: str):
@@ -176,10 +182,13 @@ A Page is a session and views container.
 
 
     def add (self, control: Control):
-        """Add a control to the current view.
+        """Add a control to the current view or to the overlays.
         
         Uses the current_view.add_control."""
-        self.current_view.add_control(control)
+        if isinstance(control, OverlayControl):
+            self.overlays.add_control(control)
+        else:
+            self.current_view.add_control(control)
 
 
     def _client_changed_route (self, route: str, informative: bool = False):

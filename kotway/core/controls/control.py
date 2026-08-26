@@ -165,6 +165,10 @@ class Control:
         if iname in self.interaction_handlers and self.interaction_handlers[iname] != None:
             execute_target(target=self.interaction_handlers[iname], args=[e])
 
+
+    def _clear_unannounced_events (self):
+        self.__unannounced_events.clear()
+
     # == Default props ==
 
     @property
