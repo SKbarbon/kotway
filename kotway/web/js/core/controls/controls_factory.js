@@ -6,6 +6,8 @@ import { Container } from "./container.js";
 import { Anchor } from "./anchor.js";
 import { IFrame } from "./iframe.js";
 
+import { AlertBox } from "./overlays/alertbox.js";
+
 export const CONTROLS_FACTORY = {
 "Text": Text,
 "TextField": TextField,
@@ -13,5 +15,7 @@ export const CONTROLS_FACTORY = {
 "Image": Image,
 "Container": Container,
 "Anchor": Anchor,
-"IFrame": IFrame
+"IFrame": IFrame,
+
+"AlertBox": AlertBox
 }

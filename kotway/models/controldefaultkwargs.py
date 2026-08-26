@@ -28,6 +28,8 @@ class ControlDefaultKwargs(TypedDict):
     text_align: Alignment
     font_weight: FontWeight | int
     elem_class: str
+    visibility: Visibility
+    z_index: int
 
     on_click: Callable[[InteractionEvent], None]
     on_pointer_enter: Callable[[InteractionEvent], None]

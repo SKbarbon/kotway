@@ -3,6 +3,7 @@ import { findControlByUuid } from "./utils/findcontrolbyuuid.js";
 import { FatalErrorMessageView } from "./custom_views/fatalerrormessageview.js";
 import { Window } from "./core/controls/window.js";
 import { Head } from "./core/head/head.js";
+import { OverlaysManager } from "./core/controls/overlays/overlaysmanager.js";
 import { ClientPageEvent, ClientPageEventName, ClientPageEventUnhandeldRoute } from "./models/clientpageevent.js";
 
 export class Page {
@@ -11,6 +12,7 @@ export class Page {
 
         this.head = new Head();
         this.window = new Window(this);
+        this.overlays = new OverlaysManager(this);
         
         this.views = [];
         this.currentRoute = "";
@@ -85,12 +87,17 @@ export class Page {
 
     getControlByUuid (uuid) {
         if (uuid == "WINDOW") {return this.window;}
+        if (uuid == "OVERLAYS_MANAGER") {return this.overlays;}
         for (const v of this.views) {
             if (v.uuid == uuid) {return v;}
             const found = findControlByUuid(uuid, v.controls);
             if (found != null) {
                 return found;
             }
+        }
+
+        for (const c of this.overlays.controls) {
+            if (c.uuid == uuid) {return c;}
         }
     }
 

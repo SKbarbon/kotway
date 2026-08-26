@@ -1,5 +1,6 @@
 
 from .control import Control
+from .overlays import *
 
 from .view import View
 from .container import Container

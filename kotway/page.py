@@ -2,6 +2,7 @@ from .models import EventCore, EventType, InteractionEvent
 from .models.events.pageevent import *
 from .models.events.client_events.clientpageevent import *
 
+from .core.controls.overlays.overlaysmanager import OverlaysManager, OverlayControl
 from .core.controls.window import Window
 from .core.controls import Control, View
 from .core.head.head import Head
@@ -12,7 +13,6 @@ from collections.abc import Callable
 
 from .utils.execute_target import execute_target
 from .utils.find_control_by_uuid import find_control_by_uuid
-import threading
 
 class Page:
     """
@@ -24,6 +24,7 @@ A Page is a session and views container.
 
         self.head = Head(page=self)
         self.window = Window(page=self)
+        self.overlays = OverlaysManager(page=self)
 
         self.views: list[View] = ViewsList(
             on_remove=self.__remove_view
@@ -41,7 +42,13 @@ A Page is a session and views container.
         """When the client goes to a route that has no view."""
 
         self.on_session_end: Callable[[], None] = None
-        """When the client is already out and disconnected."""
+        """When the client is already out and fully disconnected."""
+
+        self.on_disconnect: Callable[[Page], None] = None
+        """When the client is temporarily disconnected."""
+
+        self.on_reconnect: Callable[[Page], None] = None
+        """When the client connects after being identified as disconnected."""
 
         self.update()
         self.present_view("/")
@@ -98,6 +105,7 @@ A Page is a session and views container.
         raise Exception(f"{traceback}\n\n{exc}")
 
     def get_route_view (self, route: str):
+        """Search and get the first found `View` that represents the provided route."""
         for v in self.views:
             if (v.route == route):
                 return v
@@ -130,6 +138,7 @@ A Page is a session and views container.
         self.add_event(event)
 
     def present_view (self, view_route: str | View):
+        """Route the client to the view."""
         if isinstance(view_route, View):
             view_route = view_route.route
         self.get_route_view(view_route)
@@ -149,12 +158,17 @@ A Page is a session and views container.
             self.__run_event_handler(self.on_unhandled_route_change, data.route)
 
     def get_control_by_uuid (self, uuid:str):
-        if uuid == "WINDOW": return self.window
+        """Get the first found control with requested UUID."""
+        if uuid == self.window.uuid: return self.window
+        if uuid == self.overlays.uuid: return self.overlays
         found_control = None
         for v in self.views:
             if v.uuid == uuid: return v
             found_control = find_control_by_uuid(uuid=uuid, controls=v.controls)
             if found_control is not None: break
+
+        for c in self.overlays.controls:
+            if c.uuid == uuid: return c
         return found_control
 
     def is_route_exist (self, route: str):
@@ -173,11 +187,14 @@ A Page is a session and views container.
         self.head.title.update()
 
 
-    def add (self, control: Control):
-        """Add a control to the current view.
+    def add (self, control: Control | OverlayControl):
+        """Add a control to the current view or to the overlays.
         
         Uses the current_view.add_control."""
-        self.current_view.add_control(control)
+        if isinstance(control, OverlayControl):
+            self.overlays.add_control(control)
+        else:
+            self.current_view.add_control(control)
 
 
     def _client_changed_route (self, route: str, informative: bool = False):
@@ -194,6 +211,15 @@ A Page is a session and views container.
             self.present_view(route)
         else:
             self.__run_event_handler(self.on_unhandled_route_change, route)
+
+
+    def _handle_client_disconnect (self):
+        """Fired by the adapter when the client did temporarily disconnect"""
+        self.__run_event_handler(self.on_disconnect, self)
+
+    def _handle_client_reconnect (self):
+        """Fired by the adapter when the client reconnects after disconnection."""
+        self.__run_event_handler(self.on_reconnect, self)
 
     def __remove_view (self, view: View):
         view.page = None
