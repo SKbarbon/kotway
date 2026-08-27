@@ -7,6 +7,7 @@ import { Anchor } from "./anchor.js";
 import { IFrame } from "./iframe.js";
 
 import { AlertBox } from "./overlays/alertbox.js";
+import { PictureInPicture } from "./overlays/pictureinpicture.js";
 
 export const CONTROLS_FACTORY = {
 "Text": Text,
@@ -17,5 +18,6 @@ export const CONTROLS_FACTORY = {
 "Anchor": Anchor,
 "IFrame": IFrame,
 
-"AlertBox": AlertBox
+"AlertBox": AlertBox,
+"PictureInPicture": PictureInPicture
 }

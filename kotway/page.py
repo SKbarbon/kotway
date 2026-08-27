@@ -169,6 +169,8 @@ A Page is a session and views container.
 
         for c in self.overlays.controls:
             if c.uuid == uuid: return c
+        if found_control is None:
+            found_control = find_control_by_uuid(uuid=uuid, controls=self.overlays.controls)
         return found_control
 
     def is_route_exist (self, route: str):

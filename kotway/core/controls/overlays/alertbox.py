@@ -7,6 +7,7 @@ class AlertBox (OverlayControl):
     IMPORTANT: Alerts are blocking on the client!"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._clear_unannounced_events()
 
     def show (self, message: str):
         """Show a message on an alert box."""

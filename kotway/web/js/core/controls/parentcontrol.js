@@ -18,7 +18,7 @@ export class ParentControl extends Control {
         this.htmlElement.append(control.htmlElement);
     }
 
-    removeControl (control, wrapperElement) {
+    removeControl (control) {
         control.view = null;
         control.page = null;
         control.parent = null;

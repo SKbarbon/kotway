@@ -30,6 +30,7 @@ class ControlDefaultKwargs(TypedDict):
     elem_class: str
     visibility: Visibility
     z_index: int
+    user_select: UserSelect
 
     on_click: Callable[[InteractionEvent], None]
     on_pointer_enter: Callable[[InteractionEvent], None]

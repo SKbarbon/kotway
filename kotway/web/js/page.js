@@ -99,6 +99,10 @@ export class Page {
         for (const c of this.overlays.controls) {
             if (c.uuid == uuid) {return c;}
         }
+        const found = findControlByUuid(uuid, this.overlays.controls);
+        if (found != null) {
+            return found;
+        }
     }
 
     /**

@@ -27,17 +27,20 @@ from pyodide.http import pyfetch
 response = await pyfetch("${appPath}")
 await response.unpack_archive()
 
-# Add the extracted app to path.
-sys.path.insert(0, "app")
-
 # Download requirements
 ${self.installRequirementsScript}
 
 # Try to run the app.
 try:
+    # 1. Change directory to the unzipped app folder
     os.chdir("app")
-    sys.path.insert(0, "app")
-    runpy.run_module("app.main", run_name="__main__")
+    
+    # 2. Add the absolute current working directory to sys.path
+    #    This lets Python find 'views' directly inside 'app'
+    sys.path.insert(0, os.getcwd())
+    
+    # 3. Run 'main' directly instead of 'app.main'
+    runpy.run_module("main", run_name="__main__")
 except Exception as e:
     traceback.print_exception(e)
   `);
