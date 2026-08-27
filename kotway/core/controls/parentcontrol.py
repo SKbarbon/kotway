@@ -13,10 +13,9 @@ class ParentControl (Control):
                 flex_direction: FlexDirection | None = None,
                   place_items: Alignment = None, justify_content: Alignment = None, 
                   align_items: Alignment = None, 
-                  flex: Flex | None | str = None, 
-                  margin: SizeUnit | int | None = 5,
+                  flex: Flex | None | str = None,
                   *args, **kwargs: Unpack[ControlDefaultKwargs]):
-        super().__init__(margin=margin, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.controls: list[Control] = ControlsList(
             on_append=self.__setup_control_child,

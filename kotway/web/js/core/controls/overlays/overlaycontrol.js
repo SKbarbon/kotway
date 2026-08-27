@@ -5,7 +5,4 @@ export class OverlayControl extends Control {
     constructor () {
         super();
     }
-
-    updateProp() {}
-    removeProp() {}
 }
