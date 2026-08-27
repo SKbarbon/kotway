@@ -67,4 +67,4 @@ class TextField (Control):
 
     @on_input.setter
     def on_input (self, value):
-        self._set_interaction_handler("input", value)
+        self._set_interaction_handler("input", value, custom_interaction=True)

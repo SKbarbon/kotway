@@ -6,12 +6,12 @@ export class TextField extends Control {
         this.htmlElement = document.createElement("input");
         this.htmlElement.type = "text";
 
-        // const interactionEvents = ["input", "change"];
-        // interactionEvents.forEach(ie => {
-        //     this.listenToInteractionEvent(
-        //         ie
-        //     )
-        // });
+        const interactionEvents = ["input"];
+        interactionEvents.forEach(ie => {
+            this.listenToInteractionEvent(
+                ie
+            )
+        });
 
         this._setTrigger("focus", this.toggleFocus.bind(this));
     }
