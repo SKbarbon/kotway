@@ -422,11 +422,15 @@ class Control:
 
     @property
     def user_select (self):
+        """Controls whether and how a user can highlight and select the text in this element or the element itself.
+        
+        API Note: It sets the same value you provide for `-webkit-user-select`."""
         return self._get_prop_value(ElementPropType.STYLE, "user-select")
 
     @user_select.setter
     def user_select (self, value: UserSelect):
         self._set_prop_value(ElementPropType.STYLE, "user-select", value)
+        self._set_prop_value(ElementPropType.STYLE, "-webkit-user-select", value)
 
     # EVENT HANDLERS
     @property
