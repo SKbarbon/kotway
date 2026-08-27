@@ -16,11 +16,11 @@ kotway.App(main).run()
 ```
 <img width="301" height="218" alt="image" src="https://github.com/user-attachments/assets/e893dd1b-d592-4075-84ff-30065300739a" />
 
-**I lied 🤭. Confetti 🎊!!!**, You made A WEB APP 🤯!
+**Confetti 🎊!!!**, You made A WEB APP 🤯!
 
 ## Capabilities
 Cleans your room, watch movies with you, and--
-Wait, opps spoilers 😁.
+Wait, opps spoilers ..
 
 ### ONLY Python 👻
 Yup. Everything else is a ghost. Build EVERYTHING in your web app using JUST Python. No html, no javascript, just our cute python.
