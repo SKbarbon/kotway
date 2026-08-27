@@ -14,6 +14,8 @@ def main (page: kotway.Page):
 
 kotway.App(main).run()
 ```
+<img width="301" height="218" alt="image" src="https://github.com/user-attachments/assets/e893dd1b-d592-4075-84ff-30065300739a" />
+
 **I lied 🤭. Confetti 🎊!!!**, You made A WEB APP 🤯!
 
 ## Capabilities
