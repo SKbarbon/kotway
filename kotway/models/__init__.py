@@ -16,6 +16,7 @@ from .properties.sandboxtoken import SandboxToken
 from .properties.allowpolicy import AllowPolicy
 from .properties.fontweight import FontWeight
 from .properties.visibility import Visibility
+from .properties.userselect import UserSelect
 
 from .events.client_events.interactionevent import InteractionEvent
 from .events.client_events.clientevent import ClientEvent, ClientEventType

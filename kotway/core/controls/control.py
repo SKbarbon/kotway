@@ -31,6 +31,7 @@ class Control:
                 elem_class: str = None,
                 visibility: Visibility | str = None,
                 z_index: int = None,
+                user_select: UserSelect = None,
 
                 on_click: Callable[[InteractionEvent], None] = None,
                 on_pointer_enter: Callable[[InteractionEvent], None] = None
@@ -73,6 +74,7 @@ class Control:
         self.elem_class = elem_class
         self.visibility = visibility
         self.z_index = z_index
+        self.user_select = user_select
 
         self.on_click = on_click
         self.on_pointer_enter = on_pointer_enter
@@ -416,6 +418,15 @@ class Control:
     @z_index.setter
     def z_index (self, value: int):
         self._set_prop_value(ElementPropType.STYLE, "z-index", value)
+
+
+    @property
+    def user_select (self):
+        return self._get_prop_value(ElementPropType.STYLE, "user-select")
+
+    @user_select.setter
+    def user_select (self, value: UserSelect):
+        self._set_prop_value(ElementPropType.STYLE, "user-select", value)
 
     # EVENT HANDLERS
     @property
