@@ -57,9 +57,9 @@ I love ducks 🦆, but let's talk about docs.
 
 I'm trying my best to cover everything. Until we have a real docs page, all documentation will be here: [CLICK ME, LES GO🐎!](https://github.com/SKbarbon/kotway/tree/main/docs)
 
-## Note
+## Contribution
 The library is still a baby. A lot of features are coming, and if you encounter ANY issue please submit an issue here: [Issues page](https://github.com/SKbarbon/kotway/issues)
 
 Or if you just wanna ask a question or talk about kotway, you can go [Here](https://github.com/SKbarbon/kotway/discussions).
 
-Contributions are welcome.
+Contributions are welcome. As it is currently a priority to keep growing, we need more `kotway` community packages that allows for more Customization, utility, and bridging to powerful js frameworks.
